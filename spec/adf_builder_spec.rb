@@ -3,7 +3,8 @@
 RSpec.describe AdfBuilder do
   it "has a version number" do
     builder = AdfBuilder::Builder.new
-    puts builder.minimal_lead
+    builder.lead.prospect_renew
+    puts builder.to_xml
     expect(AdfBuilder::VERSION).not_to be nil
   end
 

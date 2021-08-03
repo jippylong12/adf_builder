@@ -17,6 +17,11 @@ module AdfBuilder
       @lead
     end
 
+    # output the XML
+    def to_xml
+      Ox.dump(@doc, {})
+    end
+
     # def an example of minimal XML taken from ADF spec file http://adfxml.info/adf_spec.pdf
     def minimal_lead
       adf = Ox::Element.new("adf")
@@ -69,6 +74,8 @@ module AdfBuilder
     end
 
 
+
+
     private
 
 
@@ -82,6 +89,8 @@ module AdfBuilder
       instruct = Ox::Instruct.new(:xml)
       instruct[:version] = '1.0'
       doc << instruct
+      adf = Ox::Element.new("adf")
+      doc << adf
       doc
     end
   end
