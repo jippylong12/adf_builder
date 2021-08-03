@@ -2,12 +2,14 @@ PATH
   remote: .
   specs:
     adf_builder (0.0.1)
+      ox (~> 2.14)
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
     diff-lcs (1.4.4)
+    ox (2.14.5)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
@@ -47,6 +49,7 @@ PLATFORMS
 
 DEPENDENCIES
   adf_builder!
+  ox (~> 2.14)
   rake (~> 13.0)
   rspec (~> 3.0)
   rubocop (~> 1.7)
