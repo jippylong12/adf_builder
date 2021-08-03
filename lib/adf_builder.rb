@@ -18,7 +18,7 @@ module AdfBuilder
     end
 
     # def an example of minimal XML taken from ADF spec file http://adfxml.info/adf_spec.pdf
-    def minimal_xml
+    def minimal_lead
       adf = Ox::Element.new("adf")
 
       prospect = Ox::Element.new("prospect")

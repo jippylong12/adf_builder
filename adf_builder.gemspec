@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["12.marcus.salinas@gmail.com"]
 
   spec.summary       = "Create XML for the Auto-lead Date Format"
-  spec.description   = "Useful in order to easily create XML so in ADF format to send by email."
+  spec.description   = "Easily create XML in ADF format to send by email."
   spec.homepage      = "https://github.com/jippylong12/adf_builder"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 2.4.0"
