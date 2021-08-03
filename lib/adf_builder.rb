@@ -2,7 +2,7 @@
 
 require_relative "adf_builder/version"
 require_relative 'adf_builder/lead'
-
+require_relative 'adf_builder/lead/prospect'
 require 'ox'
 
 module AdfBuilder
