@@ -1,5 +1,5 @@
 module AdfBuilder
-  class Lead
+  class Base
     # initialize the prospect, id, and requestdate node
     def initialize(doc)
       @doc = doc

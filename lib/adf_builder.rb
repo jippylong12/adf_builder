@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require_relative "adf_builder/version"
-require_relative 'adf_builder/lead'
-require_relative 'adf_builder/lead/prospect'
+require_relative 'adf_builder/base'
+require_relative 'adf_builder/base/prospect'
 require 'ox'
 
 module AdfBuilder
@@ -10,11 +10,11 @@ module AdfBuilder
   class Builder
     def initialize
       @doc = self.init_doc
-      @lead = Lead.new(@doc)
+      @base = Base.new(@doc)
     end
 
-    def lead
-      @lead
+    def base
+      @base
     end
 
     # output the XML
