@@ -3,8 +3,11 @@
 RSpec.describe AdfBuilder do
   it "has a version number" do
     builder = AdfBuilder::Builder.new
-    builder.base.prospect.vehicles.add(2021, 'hyuu', 'ffff')
-    builder.base.prospect.vehicles.add(2044, '234', 'ffff')
+    builder.base.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+      interest: :sell,
+      status: :used,
+      vin: 'XXXXXXXXXX',
+    })
     puts builder.to_xml
     expect(AdfBuilder::VERSION).not_to be nil
   end

@@ -48,8 +48,6 @@ module AdfBuilder
       vehicle[:interest] = interest
       vehicle[:status] = status
 
-      #      vehicle << Ox::Element.new('year').prepend_child(year.to_s)
-
       vehicle << (Ox::Element.new('year') << year.to_s)
       vehicle << (Ox::Element.new('make') << make)
       vehicle << (Ox::Element.new('model') << model)

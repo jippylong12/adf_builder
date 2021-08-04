@@ -10,6 +10,8 @@ module AdfBuilder
       @doc.adf << Ox::Element.new("prospect")
       @prospect = @doc.adf.prospect
       @prospect[:status] = STATUSES[:new]
+
+
       @request_date = RequestDate.new(@prospect)
       @vehicles = Vehicles.new(@prospect)
     end

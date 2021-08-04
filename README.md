@@ -84,8 +84,60 @@ Outputs
 </adf>
 ```
 
+Add Vehicle
 
+```ruby
+builder = AdfBuilder::Builder.new
+builder.base.prospect.vehicles.add(2021, 'Ford', 'Raptor')
+```
 
+Outputs
+
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-04T18:08:50+04:00</requestdate>
+    <vehicle interest="buy" status="new">
+      <year>2021</year>
+      <make>Ford</make>
+      <model>Raptor</model>
+    </vehicle>
+  </prospect>
+</adf>
+```
+Add Vehicle with tags
+
+```ruby
+builder = AdfBuilder::Builder.new
+builder.base.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+  interest: :sell, 
+  status: :used,
+  vin: 'XXXXXXXXXX',
+})
+```
+
+Outputs
+
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-04T18:16:31+04:00</requestdate>
+    <vehicle interest="sold" status="used">
+      <year>2021</year>
+      <make>Toyota</make>
+      <model>Prius</model>
+      <vin>XXXXXXXXXX</vin>
+    </vehicle>
+  </prospect>
+</adf>
+
+```
 
 ## Development
 
