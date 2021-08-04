@@ -1,8 +1,5 @@
 # AdfBuilder
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/adf_builder`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Hopefully this will help with development in the ADF format. The goal is to intuitively create an update an ADF XML file that can easily be added to an email or saved to a file.
 
 ## Installation
 
@@ -22,7 +19,60 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Quickly create the minimal lead found in the spec document
+
+    builder = AdfBuilder::Builder.new
+    builder.minimal_lead
+
+Start Building
+
+    builder = AdfBuilder::Builder.new
+    builder.to_xml
+
+Outputs 
+    
+    <?ADF version="1.0"?>
+    <?xml version="1.0"?>
+    <adf>
+      <prospect status="new">
+        <requestdate>2021-08-04T15:18:30+04:00</requestdate>
+      </prospect>
+    </adf>
+
+Update Requestdate value
+
+    builder = AdfBuilder::Builder.new
+    builder.base.prospect.request_date.update_val(Date.new(2021,12,12))
+
+Outputs
+
+    <?ADF version="1.0"?>
+    
+    <?xml version="1.0"?>
+    <adf>
+      <prospect status="new">
+        <requestdate>2021-12-12T00:00:00+00:00</requestdate>
+      </prospect>
+    </adf>
+
+Add ID tag to Prospect
+
+    builder = AdfBuilder::Builder.new
+    builder.base.prospect.add_id('howdy', 'Ag')
+
+Outputs
+
+    <?ADF version="1.0"?>
+    
+    <?xml version="1.0"?>
+    <adf>
+      <prospect status="new">
+        <id sequence="1" source="Ag">howdy</id>
+        <requestdate>2021-08-04T15:24:16+04:00</requestdate>
+      </prospect>
+    </adf>
+
+
 
 ## Development
 
