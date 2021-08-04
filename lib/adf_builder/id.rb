@@ -8,13 +8,13 @@ module AdfBuilder
     def add(parent_node, value, source=nil, sequence=1)
       id_node = Ox::Element.new('id')
       id_node << value
-      id_node[:source] = sequence
+      id_node[:sequence] = sequence
 
       if source
         id_node[:source] = source
       end
 
-      parent_node << id_node
+      parent_node.prepend_child(id_node)
     end
   end
 end

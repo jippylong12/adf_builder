@@ -21,5 +21,9 @@ module AdfBuilder
     def set_renew
       @prospect[:status] = STATUSES[:resend]
     end
+
+    def add_id(value, source=nil, sequence=1)
+      Id.new.add(@prospect, value, source, sequence)
+    end
   end
 end
