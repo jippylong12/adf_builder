@@ -1,5 +1,5 @@
 # AdfBuilder
-Hopefully this will help with development in the ADF format. The goal is to intuitively create an update and ADF XML file that can easily be added to an email or saved to a file.
+Hopefully this will help with development in the ADF format. The goal is to intuitively create and update an ADF XML file that can easily be added to an email or saved to a file.
 
 ## Installation
 
