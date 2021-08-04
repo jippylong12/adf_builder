@@ -10,67 +10,80 @@ gem 'adf_builder'
 ```
 
 And then execute:
-
-    $ bundle install
+```shell
+$ bundle install
+```
 
 Or install it yourself as:
-
-    $ gem install adf_builder
+```shell
+$ gem install adf_builder
+```
 
 ## Usage
 
 Quickly create the minimal lead found in the spec document
-
-    builder = AdfBuilder::Builder.new
-    builder.minimal_lead
-
+```ruby
+builder = AdfBuilder::Builder.new
+builder.minimal_lead
+```
 Start Building
+```ruby
+builder = AdfBuilder::Builder.new
+builder.to_xml
+```
 
-    builder = AdfBuilder::Builder.new
-    builder.to_xml
 
-Outputs 
-    
-    <?ADF version="1.0"?>
-    <?xml version="1.0"?>
-    <adf>
-      <prospect status="new">
-        <requestdate>2021-08-04T15:18:30+04:00</requestdate>
-      </prospect>
-    </adf>
+Outputs
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-04T15:18:30+04:00</requestdate>
+  </prospect>
+</adf>
+```
+
 
 Update Requestdate value
-
-    builder = AdfBuilder::Builder.new
-    builder.base.prospect.request_date.update_val(Date.new(2021,12,12))
-
+```ruby
+builder = AdfBuilder::Builder.new
+builder.base.prospect.request_date.update_val(Date.new(2021,12,12))
+```
 Outputs
 
-    <?ADF version="1.0"?>
-    
-    <?xml version="1.0"?>
-    <adf>
-      <prospect status="new">
-        <requestdate>2021-12-12T00:00:00+00:00</requestdate>
-      </prospect>
-    </adf>
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-12-12T00:00:00+00:00</requestdate>
+  </prospect>
+</adf>
+```
+
 
 Add ID tag to Prospect
-
-    builder = AdfBuilder::Builder.new
-    builder.base.prospect.add_id('howdy', 'Ag')
+```ruby
+builder = AdfBuilder::Builder.new
+builder.base.prospect.add_id('howdy', 'Ag')
+```
 
 Outputs
+```xml
+<?ADF version="1.0"?>
 
-    <?ADF version="1.0"?>
-    
-    <?xml version="1.0"?>
-    <adf>
-      <prospect status="new">
-        <id sequence="1" source="Ag">howdy</id>
-        <requestdate>2021-08-04T15:24:16+04:00</requestdate>
-      </prospect>
-    </adf>
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <id sequence="1" source="Ag">howdy</id>
+    <requestdate>2021-08-04T15:24:16+04:00</requestdate>
+  </prospect>
+</adf>
+```
+
 
 
 
