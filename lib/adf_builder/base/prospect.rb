@@ -10,6 +10,11 @@ module AdfBuilder
       @doc.adf << Ox::Element.new("prospect")
       @prospect = @doc.adf.prospect
       @prospect[:status] = STATUSES[:new]
+      @request_date = RequestDate.new(@prospect)
+    end
+
+    def request_date
+      @request_date
     end
 
     # set status to renew
