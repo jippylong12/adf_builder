@@ -128,7 +128,7 @@ Outputs
 <adf>
   <prospect status="new">
     <requestdate>2021-08-04T18:16:31+04:00</requestdate>
-    <vehicle interest="sold" status="used">
+    <vehicle interest="sell" status="used">
       <year>2021</year>
       <make>Toyota</make>
       <model>Prius</model>
