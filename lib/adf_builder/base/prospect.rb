@@ -11,10 +11,15 @@ module AdfBuilder
       @prospect = @doc.adf.prospect
       @prospect[:status] = STATUSES[:new]
       @request_date = RequestDate.new(@prospect)
+      @vehicles = Vehicles.new(@prospect)
     end
 
     def request_date
       @request_date
+    end
+
+    def vehicles
+      @vehicles
     end
 
     # set status to renew

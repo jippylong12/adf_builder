@@ -7,7 +7,6 @@ module AdfBuilder
       @request_date_node = Ox::Element.new('requestdate')
       @request_date_node << DateTime.now.strftime('%FT%T%:z')
       prospect_node << @request_date_node
-      @request_date_node
     end
 
     def update_val(datetime_value, format=1)

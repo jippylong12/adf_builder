@@ -2,9 +2,15 @@
 
 require_relative "adf_builder/version"
 require_relative 'adf_builder/base'
+require_relative 'adf_builder/id'
+
+# BASE
 require_relative 'adf_builder/base/prospect'
 require_relative 'adf_builder/base/request_date'
-require_relative 'adf_builder/id'
+
+# VEHICLES
+require_relative 'adf_builder/vehicles/vehicles'
+
 
 
 require 'ox'
