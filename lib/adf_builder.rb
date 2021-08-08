@@ -106,5 +106,37 @@ module AdfBuilder
       doc << adf
       doc
     end
+
+    # we will either create a new node with the value or replace the one if it is available
+    def self.update_node(parent_node, key, value, params={})
+      key = key.to_s
+      value = value.to_s
+      if parent_node.locate(key).size > 0
+        node = parent_node.locate(key).first
+        node.replace_text(value)
+      else
+        node = (Ox::Element.new(key) << value)
+        parent_node << node
+      end
+
+      AdfBuilder::Builder.update_params(node, key, params)
+    end
+
+    # update the params by first checking if they are valid params and then checking if the values are valid if necessary
+    def self.update_params(node, key, params)
+      return true if params.empty?
+      key = key.to_sym
+      valid_values = params[:valid_values]
+      valid_parameters = params[:valid_parameters]
+      _params = AdfBuilder::Builder.whitelabel_params(params,valid_parameters, key)
+      _params.each do |k,v|
+        node[k] = v if valid_values[key][k] == true or valid_values[key][k].include? v.to_s
+      end
+    end
+
+    # clear out the opts that don't match valid keys
+    def self.whitelabel_params(opts, valid_parameters, key)
+      opts.slice(*valid_parameters[key])
+    end
   end
 end
