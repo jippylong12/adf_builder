@@ -9,7 +9,5 @@ module AdfBuilder
     def prospect
       @prospect
     end
-
-
   end
 end

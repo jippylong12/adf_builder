@@ -1,19 +1,21 @@
 # frozen_string_literal: true
 
+require 'ox'
 require_relative "adf_builder/version"
-require_relative 'adf_builder/base'
-require_relative 'adf_builder/id'
+
+# CUSTOMER
+require_relative 'adf_builder/customer/customer'
 
 # BASE
+require_relative 'adf_builder/base/base'
 require_relative 'adf_builder/base/prospect'
 require_relative 'adf_builder/base/request_date'
 
+# SHARED
+require_relative 'adf_builder/shared/id'
+
 # VEHICLES
 require_relative 'adf_builder/vehicles/vehicles'
-
-
-
-require 'ox'
 
 module AdfBuilder
   class Error < StandardError; end
@@ -25,6 +27,10 @@ module AdfBuilder
 
     def base
       @base
+    end
+
+    def prospect
+      @base.prospect
     end
 
     # output the XML

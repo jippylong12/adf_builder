@@ -3,7 +3,7 @@
 RSpec.describe AdfBuilder do
   it "has a version number" do
     builder = AdfBuilder::Builder.new
-    builder.base.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+    builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
       vin: 'XXXXXXXXXX',
       comments: "howdy"
     })
