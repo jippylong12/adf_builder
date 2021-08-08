@@ -42,11 +42,6 @@ module AdfBuilder
       end
     end
 
-
-
-
-    private
-
     # clear out the opts that don't match valid keys
     def whitelabel_opts(opts, key)
       opts.slice(*VALID_PARAMETERS[key])

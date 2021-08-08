@@ -5,7 +5,11 @@ RSpec.describe AdfBuilder do
     expect(AdfBuilder::VERSION).not_to be nil
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  it "can build a vehicle" do
+    builder = AdfBuilder::Builder.new
+    builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+      status: :used,
+    })
+    puts builder.to_xml
   end
 end

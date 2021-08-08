@@ -1,5 +1,11 @@
 module AdfBuilder
   class Vehicles
+    VALID_PARAMETERS = {
+      vehicle: [:interest, :status],
+      odometer: [:status, :units],
+      imagetag: [:width, :height, :alttext],
+    }
+
     INTEREST_VALUES = {
       buy: 'buy',
       lease: 'lease',
@@ -28,18 +34,16 @@ module AdfBuilder
       @prospect = prospect
     end
 
-    def add(year, make, model, tags={})
+    def add(year, make, model, params={})
       vehicle = Ox::Element.new('vehicle')
-
-      if tags[:interest]
-        interest = INTEREST_VALUES[tags[:interest].to_sym]
-        tags.delete(:interest)
+      params = whitelabel_opts(params, :vehicle)
+      if params[:interest]
+        interest = INTEREST_VALUES[params[:interest].to_sym]
         vehicle[:interest] = interest
       end
 
-      if tags[:status]
-        status = STATUS_VALUES[tags[:status].to_sym]
-        tags.delete(:status)
+      if params[:status]
+        status = STATUS_VALUES[params[:status].to_sym]
         vehicle[:status] = status
       end
 
@@ -47,12 +51,6 @@ module AdfBuilder
       vehicle << (Ox::Element.new('year') << year.to_s)
       vehicle << (Ox::Element.new('make') << make)
       vehicle << (Ox::Element.new('model') << model)
-
-      tags.each do |key, value|
-        if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
-          vehicle << (Ox::Element.new(key.to_s) << value)
-        end
-      end
 
       @prospect << vehicle
     end
@@ -65,5 +63,10 @@ module AdfBuilder
       end
     end
 
+
+    # clear out the opts that don't match valid keys
+    def whitelabel_opts(opts, key)
+      opts.slice(*VALID_PARAMETERS[key])
+    end
   end
 end
