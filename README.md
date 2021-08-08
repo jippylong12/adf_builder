@@ -1,5 +1,5 @@
 # AdfBuilder
-Hopefully this will help with development in the ADF format. The goal is to intuitively create an update an ADF XML file that can easily be added to an email or saved to a file.
+Hopefully this will help with development in the ADF format. The goal is to intuitively create and update an ADF XML file that can easily be added to an email or saved to a file.
 
 ## Installation
 
@@ -128,7 +128,7 @@ Outputs
 <adf>
   <prospect status="new">
     <requestdate>2021-08-04T18:16:31+04:00</requestdate>
-    <vehicle interest="sold" status="used">
+    <vehicle interest="sell" status="used">
       <year>2021</year>
       <make>Toyota</make>
       <model>Prius</model>
