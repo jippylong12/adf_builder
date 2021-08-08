@@ -50,6 +50,13 @@ module AdfBuilder
       end
     end
 
+    def update_condition(index, value)
+      valid, vehicle = valid_vehicle?(index)
+      if valid and CONDITIONS.include? value
+        update_node(vehicle, 'condition', value)
+      end
+    end
+
     def update_tags_with_free_text(index, tags)
       valid, vehicle = valid_vehicle?(index)
       if valid
@@ -99,6 +106,7 @@ module AdfBuilder
       update_params(node, key, params)
     end
 
+    # update the params by first checking if they are valid params and then checking if the values are valid if necessary
     def update_params(node, key, params)
       key = key.to_sym
       _params = whitelabel_params(params, key)

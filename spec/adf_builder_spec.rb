@@ -17,6 +17,7 @@ RSpec.describe AdfBuilder do
     builder.prospect.vehicles.update_odometer(0, 9000, {
       units: 'km'
     })
+    builder.prospect.vehicles.update_condition(0, 'ffff')
     puts builder.to_xml
   end
 end
