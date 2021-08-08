@@ -8,7 +8,11 @@ RSpec.describe AdfBuilder do
       comments: "howdy"
     })
     builder.prospect.vendor.add('marcus', 'test')
-    builder.prospect.customer.add('marcus')
+    builder.prospect.customer.add('Marcus Salinas', {
+      part: 'full',
+      type: 'individual'
+    })
+    builder.prospect.customer.contact.add_phone('+14329783452')
     puts builder.to_xml
     expect(AdfBuilder::VERSION).not_to be nil
   end

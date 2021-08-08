@@ -6,6 +6,10 @@ module AdfBuilder
       prospect << @vendor
     end
 
+    def contact
+      @contact
+    end
+
     def add(name, contact_name)
       @vendor << (Ox::Element.new('vendorname') << name)
       @contact = Contact.new(@vendor, contact_name)

@@ -7,8 +7,12 @@ module AdfBuilder
       prospect << @customer
     end
 
-    def add(name)
-      @contact = Contact.new(@customer, name)
+    def contact
+      @contact
+    end
+
+    def add(name, opts={})
+      @contact = Contact.new(@customer, name, opts)
     end
 
     def add_id(index, value, source=nil, sequence=1)
