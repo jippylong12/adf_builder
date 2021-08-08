@@ -17,8 +17,9 @@ require_relative 'adf_builder/shared/contact'
 
 # VEHICLES
 require_relative 'adf_builder/vehicles/vehicles'
+require_relative 'adf_builder/vehicles/colorcombinations'
 
-# VENDER
+# VENDOR
 require_relative 'adf_builder/vendor/vendor'
 
 module AdfBuilder
@@ -137,6 +138,11 @@ module AdfBuilder
     # clear out the opts that don't match valid keys
     def self.whitelabel_params(opts, valid_parameters, key)
       opts.slice(*valid_parameters[key])
+    end
+
+    def self.valid_child?(parent, tag_name, index)
+      child = parent.locate(tag_name)[index]
+      return !child.nil?,child
     end
   end
 end

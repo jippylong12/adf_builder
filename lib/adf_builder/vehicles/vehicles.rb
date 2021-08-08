@@ -29,6 +29,20 @@ module AdfBuilder
 
     def initialize(prospect)
       @prospect = prospect
+      @color_combinations = []
+    end
+
+    def add_color_combination(v_index, interior_color, exterior_color, preference)
+      valid, vehicle = AdfBuilder::Builder.valid_child?(@prospect,'vehicle', v_index)
+      if valid
+        cc = ColorCombinations.new(vehicle)
+        cc.add(interior_color, exterior_color, preference)
+        @color_combinations.push(cc)
+      end
+    end
+
+    def color_combinations
+      @color_combinations
     end
 
     def add(year, make, model, params={})
@@ -45,7 +59,7 @@ module AdfBuilder
     end
 
     def update_odometer(index, value, params={})
-      valid, vehicle = valid_vehicle?(index)
+      valid, vehicle = AdfBuilder::Builder.valid_child?(@prospect,'vehicle', index)
       if valid
         params.merge!({valid_values: VALID_VALUES, valid_parameters: VALID_PARAMETERS})
         AdfBuilder::Builder.update_node(vehicle, 'odometer', value, params)
@@ -53,14 +67,14 @@ module AdfBuilder
     end
 
     def update_condition(index, value)
-      valid, vehicle = valid_vehicle?(index)
+      valid, vehicle = AdfBuilder::Builder.valid_child?(@prospect,'vehicle', index)
       if valid and CONDITIONS.include? value
         AdfBuilder::Builder.update_node(vehicle, 'condition', value)
       end
     end
 
     def update_imagetag(index, value, params={})
-      valid, vehicle = valid_vehicle?(index)
+      valid, vehicle = AdfBuilder::Builder.valid_child?(@prospect,'vehicle', index)
       if valid
         params.merge!({valid_values: VALID_VALUES, valid_parameters: VALID_PARAMETERS})
         AdfBuilder::Builder.update_node(vehicle, 'imagetag', value, params)
@@ -68,7 +82,7 @@ module AdfBuilder
     end
 
     def update_tags_with_free_text(index, tags)
-      valid, vehicle = valid_vehicle?(index)
+      valid, vehicle = AdfBuilder::Builder.valid_child?(@prospect,'vehicle', index)
       if valid
         tags.each do |key, value|
           if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
@@ -83,15 +97,6 @@ module AdfBuilder
         false
       else
         Id.new.add(@prospect.vehicle(index), value, source, sequence)
-      end
-    end
-
-    # check to see if we have a vehicle at this index
-    def valid_vehicle?(index)
-      if @prospect.vehicle(index).nil?
-        return false,nil
-      else
-        return true, @prospect.vehicle(index)
       end
     end
   end

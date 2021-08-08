@@ -5,6 +5,21 @@ RSpec.describe AdfBuilder do
     expect(AdfBuilder::VERSION).not_to be nil
   end
 
+  it 'can add color combination' do
+    builder = AdfBuilder::Builder.new
+    builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+      status: :used,
+    })
+    builder.prospect.vehicles.add_color_combination(0, 'black', 'yellow', 1)
+    puts builder.to_xml
+    builder.prospect.vehicles.color_combinations[0].update_tags(0, {
+      preference: 20,
+      interiorcolor: 'yellow'
+    })
+    puts builder.to_xml
+
+  end
+
   it "can build a vehicle" do
     builder = AdfBuilder::Builder.new
     builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
