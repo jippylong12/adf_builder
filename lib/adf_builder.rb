@@ -40,8 +40,6 @@ module AdfBuilder
 
     # def an example of minimal XML taken from ADF spec file http://adfxml.info/adf_spec.pdf
     def minimal_lead
-      adf = Ox::Element.new("adf")
-
       prospect = Ox::Element.new("prospect")
 
       request_date = Ox::Element.new("requestdate")
@@ -84,11 +82,15 @@ module AdfBuilder
       vendor << contact
 
       prospect << request_date << vehicle << customer << vendor
-      adf << prospect
-      @doc << adf
+      @doc.remove_children_by_path("adf/prospect")
+      @doc.adf << prospect
       Ox.dump(@doc, {})
     end
 
+    # go back to the initial structure
+    def reset_doc
+      @doc.adf.prospect.remove_children_by_path("*")
+    end
 
     # all the files will start with this same header
     def init_doc

@@ -17,6 +17,13 @@
 - Add Provider structure
 - Add Price structure
 
+## [0.0.6] - 2021-08-08
+- minimal_lead function will remove all previous adf nodes
+- Created ability to reset doc
+
+## [0.0.5] - 2021-08-08
+- Fixed bug that kept us from using the library
+
 ## [0.0.4] - 2021-08-08
 - Added Customer, Contact, Vendor basic structure
 
