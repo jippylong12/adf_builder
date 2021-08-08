@@ -90,11 +90,6 @@ module AdfBuilder
     end
 
 
-
-
-    private
-
-
     # all the files will start with this same header
     def init_doc
       doc = Ox::Document.new
