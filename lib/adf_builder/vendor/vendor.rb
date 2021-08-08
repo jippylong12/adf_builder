@@ -10,9 +10,16 @@ module AdfBuilder
       @contact
     end
 
-    def add(name, contact_name)
+    def add(name, contact_name, opts={})
       @vendor << (Ox::Element.new('vendorname') << name)
-      @contact = Contact.new(@vendor, contact_name)
+      @contact = Contact.new(@vendor, contact_name, opts)
+    end
+
+    def add_url(url)
+      if @vendor.locate("url").size > 0
+        @vendor.remove_children(@vendor.url)
+      end
+      @vendor << (Ox::Element.new('url') << url)
     end
 
     def add_id(index, value, source=nil, sequence=1)

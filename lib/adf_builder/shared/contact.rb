@@ -6,7 +6,6 @@ module AdfBuilder
       phone: [:type, :time, :preferredcontact]
     }
 
-
     PHONE_TYPES = [:phone, :fax, :cellphone, :pager]
 
     def initialize(parent_node, name, opts={})
