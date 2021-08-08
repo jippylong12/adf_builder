@@ -6,21 +6,26 @@ module AdfBuilder
       imagetag: [:width, :height, :alttext],
     }
 
-    INTEREST_VALUES = {
-      buy: 'buy',
-      lease: 'lease',
-      sell: 'sell',
-      trade_in: 'trade-in',
-      test_drive: 'test-drive'
-    }
-
-    STATUS_VALUES = {
-      new: 'new',
-      used: 'used'
+    VALID_VALUES = {
+      vehicle: {
+        interest: %w[buy lease sell trade-in test-drive],
+        status: %w[new used]
+      },
+      odometer: {
+        status: %w[unknown rolledover replaced original],
+        units: %w[km mi]
+      },
+      imagetag: {
+        width: true,
+        height: true,
+        alttext: true
+      }
     }
 
     FREE_TEXT_OPTIONAL_TAGS = [:year, :make, :model, :vin, :stock,
       :trim, :doors, :bodystyle, :transmission, :pricecomments, :comments]
+
+    CONDITIONS = %w[excellent good fair poor unknown]
 
     def initialize(prospect)
       @prospect = prospect
@@ -28,17 +33,8 @@ module AdfBuilder
 
     def add(year, make, model, params={})
       vehicle = Ox::Element.new('vehicle')
-      params = whitelabel_opts(params, :vehicle)
-      if params[:interest]
-        interest = INTEREST_VALUES[params[:interest].to_sym]
-        vehicle[:interest] = interest
-      end
 
-      if params[:status]
-        status = STATUS_VALUES[params[:status].to_sym]
-        vehicle[:status] = status
-      end
-
+      update_params(vehicle, :vehicle, params)
 
       vehicle << (Ox::Element.new('year') << year.to_s)
       vehicle << (Ox::Element.new('make') << make)
@@ -47,17 +43,19 @@ module AdfBuilder
       @prospect << vehicle
     end
 
-    def update_free_text_tags(index, tags)
-      if @prospect.vehicle(index).nil?
-        return false
+    def update_odometer(index, value, params={})
+      valid, vehicle = valid_vehicle?(index)
+      if valid
+        update_node(vehicle, 'odometer', value, params)
       end
-      vehicle = @prospect.vehicle(index)
-      tags.each do |key, value|
-        if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
-          if vehicle.locate(key.to_s).size > 0
-            vehicle.locate(key.to_s).first.replace_text(value)
-          else
-            vehicle << (Ox::Element.new(key.to_s) << value)
+    end
+
+    def update_tags_with_free_text(index, tags)
+      valid, vehicle = valid_vehicle?(index)
+      if valid
+        tags.each do |key, value|
+          if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
+            update_node(vehicle, key, value)
           end
         end
       end
@@ -73,8 +71,40 @@ module AdfBuilder
 
 
     # clear out the opts that don't match valid keys
-    def whitelabel_opts(opts, key)
+    def whitelabel_params(opts, key)
       opts.slice(*VALID_PARAMETERS[key])
+    end
+
+    # check to see if we have a vehicle at this index
+    def valid_vehicle?(index)
+      if @prospect.vehicle(index).nil?
+        return false,nil
+      else
+        return true, @prospect.vehicle(index)
+      end
+    end
+
+    # we will either create a new node with the value or replace the one if it is available
+    def update_node(vehicle, key, value, params={})
+      key = key.to_s
+      value = value.to_s
+      if vehicle.locate(key).size > 0
+        node = vehicle.locate(key).first
+        node.replace_text(value)
+      else
+        node = (Ox::Element.new(key) << value)
+        vehicle << node
+      end
+
+      update_params(node, key, params)
+    end
+
+    def update_params(node, key, params)
+      key = key.to_sym
+      _params = whitelabel_params(params, key)
+      _params.each do |k,v|
+        node[k] = v if VALID_VALUES[key][k] == true or VALID_VALUES[key][k].include? v.to_s
+      end
     end
   end
 end

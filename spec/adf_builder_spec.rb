@@ -10,9 +10,12 @@ RSpec.describe AdfBuilder do
     builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
       status: :used,
     })
-    builder.prospect.vehicles.update_free_text_tags(0, {
+    builder.prospect.vehicles.update_tags_with_free_text(0, {
       bodystyle: 'howdy',
       year: '2000'
+    })
+    builder.prospect.vehicles.update_odometer(0, 9000, {
+      units: 'km'
     })
     puts builder.to_xml
   end
