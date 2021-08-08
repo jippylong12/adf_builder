@@ -17,6 +17,11 @@
 - Add Provider structure
 - Add Price structure
 
+## [0.0.7] - 2021-08-08
+- Much refactoring so that we can reuse functions 
+- Added more functionality to the Vehicle structure including all free text, all same level tags with params, and Color Combination and ImageTag
+
+
 ## [0.0.6] - 2021-08-08
 - minimal_lead function will remove all previous adf nodes
 - Created ability to reset doc

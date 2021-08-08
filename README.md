@@ -108,15 +108,28 @@ Outputs
   </prospect>
 </adf>
 ```
-Add Vehicle with tags
+
+Vehicle with different operations
 
 ```ruby
 builder = AdfBuilder::Builder.new
 builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
-  interest: :sell, 
   status: :used,
-  vin: 'XXXXXXXXXX',
 })
+builder.prospect.vehicles.update_tags_with_free_text(0, {
+  bodystyle: 'howdy',
+  year: '2000'
+})
+builder.prospect.vehicles.update_odometer(0, 9000, {
+  units: 'km'
+})
+builder.prospect.vehicles.update_condition(0, 'ffff')
+builder.prospect.vehicles.update_imagetag(0, 'http://adfxml.info/adf_spec.pdf', {
+  width: 400,
+  height: 500,
+  alttext: 'Howdy'
+})
+puts builder.to_xml
 ```
 
 Outputs
@@ -127,16 +140,55 @@ Outputs
 <?xml version="1.0"?>
 <adf>
   <prospect status="new">
-    <requestdate>2021-08-04T18:16:31+04:00</requestdate>
-    <vehicle interest="sell" status="used">
-      <year>2021</year>
+    <requestdate>2021-08-09T00:53:59+04:00</requestdate>
+    <customer/>
+    <vendor/>
+    <vehicle status="used">
+      <year>2000</year>
       <make>Toyota</make>
       <model>Prius</model>
-      <vin>XXXXXXXXXX</vin>
+      <bodystyle>howdy</bodystyle>
+      <odometer units="km">9000</odometer>
+      <imagetag width="400" height="500" alttext="Howdy">http://adfxml.info/adf_spec.pdf</imagetag>
     </vehicle>
   </prospect>
 </adf>
+```
 
+Color Combination
+
+```ruby
+builder = AdfBuilder::Builder.new
+builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+  status: :used,
+})
+builder.prospect.vehicles.add_color_combination(0, 'black', 'yellow', 1)
+puts builder.to_xml
+```
+
+Outputs
+
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-09T00:56:07+04:00</requestdate>
+    <customer/>
+    <vendor/>
+    <vehicle status="used">
+      <year>2021</year>
+      <make>Toyota</make>
+      <model>Prius</model>
+      <colorcombination>
+        <interiorcolor>black</interiorcolor>
+        <exteriorcolor>yellow</exteriorcolor>
+        <preference>1</preference>
+      </colorcombination>
+    </vehicle>
+  </prospect>
+</adf>
 ```
 
 Add Vendor
@@ -199,6 +251,9 @@ Outputs
   </prospect>
 </adf>
 ```
+
+Different Vehicle operations
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
