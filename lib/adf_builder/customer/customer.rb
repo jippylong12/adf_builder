@@ -1,36 +1,14 @@
 module AdfBuilder
   class Customer
     def initialize(prospect)
-      @prospect = prospect
+      @customer = Ox::Element.new('customer')
+      @contact = nil
+
+      prospect << @customer
     end
 
-    def add(year, make, model, tags={})
-      vehicle = Ox::Element.new('customer')
-
-      if tags[:interest]
-        interest = INTEREST_VALUES[tags[:interest].to_sym]
-        tags.delete(:interest)
-        vehicle[:interest] = interest
-      end
-
-      if tags[:status]
-        status = STATUS_VALUES[tags[:status].to_sym]
-        tags.delete(:status)
-        vehicle[:status] = status
-      end
-
-
-      vehicle << (Ox::Element.new('year') << year.to_s)
-      vehicle << (Ox::Element.new('make') << make)
-      vehicle << (Ox::Element.new('model') << model)
-
-      tags.each do |key, value|
-        if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
-          vehicle << (Ox::Element.new(key.to_s) << value)
-        end
-      end
-
-      @prospect << vehicle
+    def add(name)
+      @contact = Contact.new(@customer, name)
     end
 
     def add_id(index, value, source=nil, sequence=1)

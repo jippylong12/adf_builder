@@ -7,6 +7,8 @@ RSpec.describe AdfBuilder do
       vin: 'XXXXXXXXXX',
       comments: "howdy"
     })
+    builder.prospect.vendor.add('marcus', 'test')
+    builder.prospect.customer.add('marcus')
     puts builder.to_xml
     expect(AdfBuilder::VERSION).not_to be nil
   end

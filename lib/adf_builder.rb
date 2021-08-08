@@ -13,9 +13,13 @@ require_relative 'adf_builder/base/request_date'
 
 # SHARED
 require_relative 'adf_builder/shared/id'
+require_relative 'adf_builder/shared/contact'
 
 # VEHICLES
 require_relative 'adf_builder/vehicles/vehicles'
+
+# VENDER
+require_relative 'adf_builder/vendor/vendor'
 
 module AdfBuilder
   class Error < StandardError; end
@@ -23,10 +27,6 @@ module AdfBuilder
     def initialize
       @doc = self.init_doc
       @base = Base.new(@doc)
-    end
-
-    def base
-      @base
     end
 
     def prospect

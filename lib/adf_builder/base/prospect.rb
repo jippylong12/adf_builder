@@ -14,6 +14,8 @@ module AdfBuilder
 
       @request_date = RequestDate.new(@prospect)
       @vehicles = Vehicles.new(@prospect)
+      @customer = Customer.new(@prospect)
+      @vendor = Vendor.new(@prospect)
     end
 
     def request_date
@@ -22,6 +24,14 @@ module AdfBuilder
 
     def vehicles
       @vehicles
+    end
+
+    def customer
+      @customer
+    end
+
+    def vendor
+      @vendor
     end
 
     # set status to renew
