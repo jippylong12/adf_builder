@@ -19,16 +19,8 @@ module AdfBuilder
       used: 'used'
     }
 
-    FREE_TEXT_OPTIONAL_TAGS = {
-      vin: :vin,
-      stock: :stock,
-      trim: :trim,
-      doors: :doors,
-      bodystyle: :bodystyle,
-      transmission: :transmission,
-      pricecomments: :pricecomments,
-      comments: :comments
-    }
+    FREE_TEXT_OPTIONAL_TAGS = [:year, :make, :model, :vin, :stock,
+      :trim, :doors, :bodystyle, :transmission, :pricecomments, :comments]
 
     def initialize(prospect)
       @prospect = prospect
@@ -53,6 +45,22 @@ module AdfBuilder
       vehicle << (Ox::Element.new('model') << model)
 
       @prospect << vehicle
+    end
+
+    def update_free_text_tags(index, tags)
+      if @prospect.vehicle(index).nil?
+        return false
+      end
+      vehicle = @prospect.vehicle(index)
+      tags.each do |key, value|
+        if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
+          if vehicle.locate(key.to_s).size > 0
+            vehicle.locate(key.to_s).first.replace_text(value)
+          else
+            vehicle << (Ox::Element.new(key.to_s) << value)
+          end
+        end
+      end
     end
 
     def add_id(index, value, source=nil, sequence=1)
