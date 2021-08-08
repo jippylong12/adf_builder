@@ -18,6 +18,11 @@ RSpec.describe AdfBuilder do
       units: 'km'
     })
     builder.prospect.vehicles.update_condition(0, 'ffff')
+    builder.prospect.vehicles.update_imagetag(0, 'http://adfxml.info/adf_spec.pdf', {
+      width: 400,
+      height: 500,
+      alttext: 'Howdy'
+    })
     puts builder.to_xml
   end
 end

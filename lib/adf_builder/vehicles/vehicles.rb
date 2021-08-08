@@ -57,6 +57,13 @@ module AdfBuilder
       end
     end
 
+    def update_imagetag(index, value, params={})
+      valid, vehicle = valid_vehicle?(index)
+      if valid
+        update_node(vehicle, 'imagetag', value, params)
+      end
+    end
+
     def update_tags_with_free_text(index, tags)
       valid, vehicle = valid_vehicle?(index)
       if valid
