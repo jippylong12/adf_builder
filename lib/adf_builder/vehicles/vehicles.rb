@@ -34,19 +34,15 @@ module AdfBuilder
       if tags[:interest]
         interest = INTEREST_VALUES[tags[:interest].to_sym]
         tags.delete(:interest)
-      else
-        interest = INTEREST_VALUES[:buy]
+        vehicle[:interest] = interest
       end
 
       if tags[:status]
         status = STATUS_VALUES[tags[:status].to_sym]
         tags.delete(:status)
-      else
-        status = STATUS_VALUES[:new]
+        vehicle[:status] = status
       end
 
-      vehicle[:interest] = interest
-      vehicle[:status] = status
 
       vehicle << (Ox::Element.new('year') << year.to_s)
       vehicle << (Ox::Element.new('make') << make)
