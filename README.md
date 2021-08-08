@@ -49,7 +49,7 @@ Outputs
 Update Requestdate value
 ```ruby
 builder = AdfBuilder::Builder.new
-builder.base.prospect.request_date.update_val(Date.new(2021,12,12))
+builder.prospect.request_date.update_val(Date.new(2021,12,12))
 ```
 Outputs
 
@@ -68,7 +68,7 @@ Outputs
 Add ID tag to Prospect
 ```ruby
 builder = AdfBuilder::Builder.new
-builder.base.prospect.add_id('howdy', 'Ag')
+builder.prospect.add_id('howdy', 'Ag')
 ```
 
 Outputs
@@ -88,7 +88,7 @@ Add Vehicle
 
 ```ruby
 builder = AdfBuilder::Builder.new
-builder.base.prospect.vehicles.add(2021, 'Ford', 'Raptor')
+builder.prospect.vehicles.add(2021, 'Ford', 'Raptor')
 ```
 
 Outputs
@@ -112,7 +112,7 @@ Add Vehicle with tags
 
 ```ruby
 builder = AdfBuilder::Builder.new
-builder.base.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
   interest: :sell, 
   status: :used,
   vin: 'XXXXXXXXXX',
@@ -139,6 +139,66 @@ Outputs
 
 ```
 
+Add Vendor
+
+```ruby
+builder = AdfBuilder::Builder.new
+builder.prospect.vendor.add('Dealer One', 'Manager Name', {
+  part: 'full',
+  type: 'individual'
+}) # options for customer object that is required in vendor
+```
+
+Outputs
+
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-08T18:43:02+04:00</requestdate>
+    <customer/>
+    <vendor>
+      <vendorname>Dealer One</vendorname>
+      <contact>
+        <name part="full" type="individual">Manager Name</name>
+      </contact>
+    </vendor>
+  </prospect>
+</adf>
+```
+
+Add Contact with phone
+
+```ruby
+builder = AdfBuilder::Builder.new
+builder.prospect.customer.add('New Guy', {
+  part: 'full',
+  type: 'individual'
+})
+builder.prospect.customer.contact.add_phone('(555)-444-3333')
+```
+
+Outputs
+
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-08T18:44:45+04:00</requestdate>
+    <customer>
+      <contact>
+        <name part="full" type="individual">New Guy</name>
+        <phone>(555)-444-3333</phone>
+      </contact>
+    </customer>
+    <vendor/>
+  </prospect>
+</adf>
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

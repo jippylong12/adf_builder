@@ -8,13 +8,18 @@
   - price
   - option
   - finance
-  
+- Expand Structures for all parameters
+  - Customer 
+  - Vehicle
+  - Contact
+
 ### In many moons
-- Add Vendor structure
-- Add Customer structure
 - Add Provider structure
-- Add Contact structure
 - Add Price structure
+
+## [0.0.4] - 2021-08-08
+- Added Customer, Contact, Vendor basic structure
+
 
 ## [0.0.3] - 2021-08-04
 - Added ability to add simple vehicle structures
