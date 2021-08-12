@@ -19,6 +19,20 @@ module AdfBuilder
       @prospect << @provider
     end
 
+    def add_contact(name, opts={})
+      @contact = Contact.new(@provider, name, opts)
+    end
+
+    def add_phone(phone, params={})
+      params.merge!({valid_values: AdfBuilder::Contact::VALID_VALUES, valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS})
+      AdfBuilder::Builder.update_node(@provider, :phone, phone,  params)
+    end
+
+    def add_email(email, params={})
+      params.merge!({valid_values: AdfBuilder::Contact::VALID_VALUES, valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS})
+      AdfBuilder::Builder.update_node(@provider, :email, email,  params)
+    end
+
     def update_tags_with_free_text(tags)
       tags.each do |key, value|
         if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym

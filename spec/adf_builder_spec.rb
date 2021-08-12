@@ -7,7 +7,18 @@ RSpec.describe AdfBuilder do
 
   it 'can add a provider' do
     builder = AdfBuilder::Builder.new
-    builder.prospect.provider.add('Testing', {part: 'full', type: 'business'})
+    provider = builder.prospect.provider
+    provider.add('Testing', {part: 'full', type: 'business'})
+    provider.update_tags_with_free_text({
+                                                           url: 'howdy',
+                                                           service: "Nice"
+                                                         })
+    provider.add_email("test@test.com", {preferredcontact: 0})
+    provider.add_phone("+14445556666", {
+      type: 'fax',
+      time: 'day'
+    })
+    builder.prospect.provider
     puts builder.to_xml
   end
 

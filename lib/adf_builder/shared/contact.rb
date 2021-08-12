@@ -9,7 +9,16 @@ module AdfBuilder
     VALID_VALUES = {
       name: {
         part: %w[first middle suffix last full],
-        type: %w[individual business]
+        type: %w[individual business],
+        primarycontact: %w[0 1]
+      },
+      email: {
+        preferredcontact: %w[0 1],
+      },
+      phone: {
+        preferredcontact: %w[0 1],
+        type: %w[phone fax cellphone pager],
+        time: %w[morning afternoon evening nopreference day]
       }
     }
 
