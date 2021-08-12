@@ -11,6 +11,9 @@ require_relative 'adf_builder/base/base'
 require_relative 'adf_builder/base/prospect'
 require_relative 'adf_builder/base/request_date'
 
+# PROVIDER
+require_relative 'adf_builder/provider/provider'
+
 # SHARED
 require_relative 'adf_builder/shared/id'
 require_relative 'adf_builder/shared/contact'

@@ -5,6 +5,12 @@ RSpec.describe AdfBuilder do
     expect(AdfBuilder::VERSION).not_to be nil
   end
 
+  it 'can add a provider' do
+    builder = AdfBuilder::Builder.new
+    builder.prospect.provider.add('Testing', {part: 'full', type: 'business'})
+    puts builder.to_xml
+  end
+
   it 'can add color combination' do
     builder = AdfBuilder::Builder.new
     builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {

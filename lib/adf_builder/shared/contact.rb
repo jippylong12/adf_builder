@@ -6,6 +6,13 @@ module AdfBuilder
       phone: [:type, :time, :preferredcontact]
     }
 
+    VALID_VALUES = {
+      name: {
+        part: %w[first middle suffix last full],
+        type: %w[individual business]
+      }
+    }
+
     PHONE_TYPES = [:phone, :fax, :cellphone, :pager]
 
     def initialize(parent_node, name, opts={})
