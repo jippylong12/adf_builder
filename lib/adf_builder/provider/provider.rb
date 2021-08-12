@@ -10,6 +10,10 @@ module AdfBuilder
       @contact = nil
     end
 
+    def contact
+      @contact
+    end
+
 
     def add(name, params={})
       @provider = Ox::Element.new('provider')
