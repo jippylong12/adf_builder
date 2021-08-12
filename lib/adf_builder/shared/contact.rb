@@ -22,8 +22,6 @@ module AdfBuilder
       }
     }
 
-    PHONE_TYPES = [:phone, :fax, :cellphone, :pager]
-
     def initialize(parent_node, name, params={})
       @contact = Ox::Element.new('contact')
       params.merge!({valid_values: VALID_VALUES, valid_parameters: VALID_PARAMETERS})

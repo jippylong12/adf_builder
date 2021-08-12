@@ -1,21 +1,17 @@
 ## [Unreleased]
-- Vehicle Structure
-  - Remaining Optional Tags that are not free text
-  - odometer
-  - condition
-  - colorcombination
-  - imagetag
+- Vehicle Structure - Remaining Optional Tags that are not free text
   - price
   - option
   - finance
 - Expand Structures for all parameters
   - Customer 
-  - Vehicle
   - Contact
+  - Vehicle
+  - Price
 
-### In many moons
-- Add Provider structure
-- Add Price structure
+
+## [0.0.8] - 2021-08-12
+- Added all of Provider structure
 
 ## [0.0.7] - 2021-08-08
 - Much refactoring so that we can reuse functions 

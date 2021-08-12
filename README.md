@@ -251,8 +251,48 @@ Outputs
   </prospect>
 </adf>
 ```
+A complex Provider 
 
-Different Vehicle operations
+```ruby
+builder = AdfBuilder::Builder.new
+provider = builder.prospect.provider
+provider.add('Testing', {part: 'full', type: 'business'})
+provider.update_tags_with_free_text({
+                                                       url: 'howdy',
+                                                       service: "Nice"
+                                                     })
+provider.add_email("test@test.com", {preferredcontact: 0})
+provider.add_phone("+14445556666", {
+  type: 'fax',
+  time: 'day'
+})
+provider.add_contact("Mr Sir")
+provider.contact.add_phone("+132435523424")
+```
+
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-12T18:56:41+04:00</requestdate>
+    <customer/>
+    <vendor/>
+    <provider>
+      <name part="full" type="business">Testing</name>
+      <url>howdy</url>
+      <service>Nice</service>
+      <email preferredcontact="0">test@test.com</email>
+      <phone type="fax" time="day">+14445556666</phone>
+      <contact>
+        <name>Mr Sir</name>
+        <phone>+132435523424</phone>
+      </contact>
+    </provider>
+  </prospect>
+</adf>
+```
 
 ## Development
 
