@@ -17,7 +17,6 @@ module AdfBuilder
 
     def add(name, params={})
       @provider = Ox::Element.new('provider')
-
       params.merge!({valid_values: AdfBuilder::Contact::VALID_VALUES, valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS})
       AdfBuilder::Builder.update_node(@provider, :name, name,  params)
       @prospect << @provider

@@ -19,7 +19,7 @@ RSpec.describe AdfBuilder do
       time: 'day'
     })
     provider.add_contact("Mr Sir")
-    provider.contact.add_phone("%132435523424")
+    provider.contact.add_phone("+132435523424")
     puts builder.to_xml
   end
 
