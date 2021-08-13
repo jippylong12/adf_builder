@@ -1,14 +1,21 @@
 ## [Unreleased]
 - Vehicle Structure - Remaining Optional Tags that are not free text
-  - price
   - option
   - finance
 - Expand Structures for all parameters
   - Customer 
   - Contact
   - Vehicle
-  - Price
 
+## [0.1.0] - 2021-08-13
+- Figured out versioning I think
+- Add Price structure to vehicles
+- Added JSON file for all 3 code currencies to validate entry
+- Color Combinations uses function instead of giving raw array so it's
+```ruby
+item.color_combination(0) # new
+item.color_combinations[0] # old
+```
 
 ## [0.0.8] - 2021-08-12
 - Added all of Provider structure

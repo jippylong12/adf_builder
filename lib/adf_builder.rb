@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'ox'
+require 'json'
+
 require_relative "adf_builder/version"
 
 # CUSTOMER
@@ -21,6 +23,7 @@ require_relative 'adf_builder/shared/contact'
 # VEHICLES
 require_relative 'adf_builder/vehicles/vehicles'
 require_relative 'adf_builder/vehicles/colorcombinations'
+require_relative 'adf_builder/vehicles/price'
 
 # VENDOR
 require_relative 'adf_builder/vendor/vendor'

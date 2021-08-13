@@ -30,6 +30,7 @@ module AdfBuilder
     def initialize(prospect)
       @prospect = prospect
       @color_combinations = []
+      @prices = []
     end
 
     def add_color_combination(v_index, interior_color, exterior_color, preference)
@@ -41,8 +42,12 @@ module AdfBuilder
       end
     end
 
-    def color_combinations
-      @color_combinations
+    def color_combination(index)
+      @color_combinations[index]
+    end
+
+    def price(index)
+      @prices[index]
     end
 
     def add(year, make, model, params={})
@@ -97,6 +102,14 @@ module AdfBuilder
         false
       else
         Id.new.add(@prospect.vehicle(index), value, source, sequence)
+      end
+    end
+
+    def add_price(index, value, params={})
+      valid, vehicle = AdfBuilder::Builder.valid_child?(@prospect,'vehicle', index)
+      if valid
+        price = Price.new(vehicle, value, params)
+        @prices.push(price)
       end
     end
   end

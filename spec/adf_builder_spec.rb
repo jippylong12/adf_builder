@@ -5,6 +5,27 @@ RSpec.describe AdfBuilder do
     expect(AdfBuilder::VERSION).not_to be nil
   end
 
+  it "can add price" do
+    builder = AdfBuilder::Builder.new
+    builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+      status: :used,
+    })
+
+    builder.prospect.vehicles.add_price(0,23400, {
+      type: 'quote',
+      currency: 'blah',
+      source: "YES"
+    })
+
+    puts builder.to_xml
+
+    builder.prospect.vehicles.price(0).update(3444, {
+      currency: 'USD'
+    })
+
+    puts builder.to_xml
+  end
+
   it 'can add a provider' do
     builder = AdfBuilder::Builder.new
     provider = builder.prospect.provider
@@ -30,7 +51,7 @@ RSpec.describe AdfBuilder do
     })
     builder.prospect.vehicles.add_color_combination(0, 'black', 'yellow', 1)
     puts builder.to_xml
-    builder.prospect.vehicles.color_combinations[0].update_tags(0, {
+    builder.prospect.vehicles.color_combination(0).update_tags(0, {
       preference: 20,
       interiorcolor: 'yellow'
     })

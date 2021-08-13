@@ -294,6 +294,68 @@ provider.contact.add_phone("+132435523424")
 </adf>
 ```
 
+Adding and Updating Price of Vehicle
+```ruby
+builder = AdfBuilder::Builder.new
+builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+  status: :used,
+})
+
+builder.prospect.vehicles.add_price(0,23400, {
+  type: 'quote',
+  currency: 'blah',
+  source: "YES"
+})
+
+puts builder.to_xml
+
+builder.prospect.vehicles.price(0).update(3444, {
+  currency: 'USD'
+})
+
+puts builder.to_xml
+```
+
+Outputs
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-13T13:28:50+04:00</requestdate>
+    <customer/>
+    <vendor/>
+    <vehicle status="used">
+      <year>2021</year>
+      <make>Toyota</make>
+      <model>Prius</model>
+      <price type="quote" source="YES">23400</price>
+    </vehicle>
+  </prospect>
+</adf>
+```
+
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+
+<adf>
+  <prospect status="new">
+    <requestdate>2021-08-13T13:28:50+04:00</requestdate>
+    <customer/>
+    <vendor/>
+    <vehicle status="used">
+      <year>2021</year>
+      <make>Toyota</make>
+      <model>Prius</model>
+      <price type="quote" source="YES" currency="USD">3444</price>
+    </vehicle>
+  </prospect>
+</adf>
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
