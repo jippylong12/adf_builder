@@ -356,6 +356,37 @@ Outputs
 </adf>
 ```
 
+Adding comments to Vehicle
+```ruby
+builder = AdfBuilder::Builder.new
+builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+  status: :used,
+})
+
+builder.prospect.vehicles.add_comments(0, "This is a comment")
+
+puts builder.to_xml
+```
+
+Outputs
+```xml
+<?ADF version="1.0"?>
+
+<?xml version="1.0"?>
+<adf>
+  <prospect status="new">
+    <requestdate>2021-11-02T16:35:43+04:00</requestdate>
+    <customer/>
+    <vendor/>
+    <vehicle status="used">
+      <year>2021</year>
+      <make>Toyota</make>
+      <model>Prius</model>
+      <comments>This is a comment</comments>
+    </vehicle>
+  </prospect>
+</adf>
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

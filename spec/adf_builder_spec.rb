@@ -5,6 +5,18 @@ RSpec.describe AdfBuilder do
     expect(AdfBuilder::VERSION).not_to be nil
   end
 
+  it "can add vehicle comment" do
+    builder = AdfBuilder::Builder.new
+    builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {
+      status: :used,
+    })
+
+    builder.prospect.vehicles.add_comments(0, "This is a comment")
+
+    puts builder.to_xml
+
+  end
+
   it "can add price" do
     builder = AdfBuilder::Builder.new
     builder.prospect.vehicles.add(2021, 'Toyota', 'Prius', {

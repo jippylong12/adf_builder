@@ -112,5 +112,12 @@ module AdfBuilder
         @prices.push(price)
       end
     end
+
+    def add_comments(index, value)
+      valid, vehicle = AdfBuilder::Builder.valid_child?(@prospect,'vehicle', index)
+      if valid
+        AdfBuilder::Builder.update_node(vehicle, 'comments', value)
+      end
+    end
   end
 end
