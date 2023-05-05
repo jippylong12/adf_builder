@@ -102,11 +102,11 @@ module AdfBuilder
     # all the files will start with this same header
     def init_doc
       doc = Ox::Document.new
-      instruct = Ox::Instruct.new('ADF')
+      instruct = Ox::Instruct.new(:xml)
       instruct[:version] = '1.0'
       doc << instruct
-      doc << Ox::Raw.new("\n")
-      instruct = Ox::Instruct.new(:xml)
+      doc << Ox::Raw.new("")
+      instruct = Ox::Instruct.new('ADF')
       instruct[:version] = '1.0'
       doc << instruct
       adf = Ox::Element.new("adf")
