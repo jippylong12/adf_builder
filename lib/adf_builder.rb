@@ -7,6 +7,7 @@ require_relative "adf_builder/version"
 
 # CUSTOMER
 require_relative 'adf_builder/customer/customer'
+require_relative 'adf_builder/customer/timeframe'
 
 # BASE
 require_relative 'adf_builder/base/base'

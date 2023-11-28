@@ -7,6 +7,12 @@
   - Contact
   - Vehicle
 
+## [0.3.0] - 2023-11-28
+- Completed Customer - timeframe and comments tags
+
+## [0.2.2] - 2021-11-02
+- Fixed bug where ADF and xml tags were flipped
+
 ## [0.2.1] - 2021-11-02
 - Add comments to the Vehicle nodes
 
