@@ -1,4 +1,15 @@
-## [Unreleased]
+## [1.0.0] - 2026-01-19
+- **MAJOR OVERHAUL**: Complete rewrtie of the library architecture.
+- **New Block-based DSL**: Intuitive API for building ADF documents (`AdfBuilder.build { vehicle { ... } }`).
+- **Validation**: Strict enforcement of ADF enumerations and structure (e.g. `vehicle status: :new`).
+- **Editing**: New `AdfBuilder.tree` method for programmatic modifications after construction.
+- **Robustness**: Complete rewrite of XML generation using robust heuristics and strict `Ox` serialization.
+- **Compatibility**: Verified for Ruby 3.4.x.
+- **Features**:
+  - Support for multiple vehicles/customers.
+  - Support for singular vs multiple item logic.
+  - Dynamic support for arbitrary/custom tags (`method_missing`).
+  - Automatic handling of XML attributes vs simple elements.
 
 ## [0.4.0] - 2026-01-19
 - Modernized dependencies
