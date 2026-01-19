@@ -40,11 +40,14 @@ module AdfBuilder
 
     def serialize_node(node, parent_element)
       # Determine element name using tag_name to avoid conflict with DSL methods like 'name'
-      element_name = if node.respond_to?(:tag_name) && node.tag_name
-                       node.tag_name.to_s
+      # Safest check: Does it have the instance variable set?
+      element_name = if node.instance_variable_defined?(:@tag_name)
+                       node.instance_variable_get(:@tag_name).to_s
                      else
                        node.class.name.split("::").last.downcase
                      end
+
+      # puts "DEBUG: Serializing #{node.class} as <#{element_name}>"
 
       element = Ox::Element.new(element_name)
 
