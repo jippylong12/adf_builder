@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 module AdfBuilder
   class Timeframe
     def initialize(customer, description, earliest_date, latest_date)
-
       begin
-        earliest_date = earliest_date.strftime('%FT%T%:z') if earliest_date
-        latest_date = latest_date.strftime('%FT%T%:z') if latest_date
-      rescue => e
+        earliest_date = earliest_date.strftime("%FT%T%:z") if earliest_date
+        latest_date = latest_date.strftime("%FT%T%:z") if latest_date
+      rescue StandardError
         return nil
       end
 
-      @timeframe = Ox::Element.new('timeframe')
+      @timeframe = Ox::Element.new("timeframe")
 
-
-      @timeframe << (Ox::Element.new('description') << description)
-      @timeframe << (Ox::Element.new('earliestdate') << earliest_date) if earliest_date
-      @timeframe << (Ox::Element.new('latestdate') << latest_date) if latest_date
+      @timeframe << (Ox::Element.new("description") << description)
+      @timeframe << (Ox::Element.new("earliestdate") << earliest_date) if earliest_date
+      @timeframe << (Ox::Element.new("latestdate") << latest_date) if latest_date
       customer << @timeframe
     end
 
@@ -24,8 +24,8 @@ module AdfBuilder
 
     def update_earliest_date(date)
       begin
-        date = date.strftime('%FT%T%:z')
-      rescue
+        date = date.strftime("%FT%T%:z")
+      rescue StandardError
         return false
       end
       AdfBuilder::Builder.update_node(@timeframe, :earliestdate, date)
@@ -33,8 +33,8 @@ module AdfBuilder
 
     def update_latest_date(date)
       begin
-        date = date.strftime('%FT%T%:z')
-      rescue
+        date = date.strftime("%FT%T%:z")
+      rescue StandardError
         return false
       end
 

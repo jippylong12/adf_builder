@@ -1,39 +1,40 @@
 # frozen_string_literal: true
 
-require 'ox'
-require 'json'
+require "ox"
+require "json"
 
 require_relative "adf_builder/version"
 
 # CUSTOMER
-require_relative 'adf_builder/customer/customer'
-require_relative 'adf_builder/customer/timeframe'
+require_relative "adf_builder/customer/customer"
+require_relative "adf_builder/customer/timeframe"
 
 # BASE
-require_relative 'adf_builder/base/base'
-require_relative 'adf_builder/base/prospect'
-require_relative 'adf_builder/base/request_date'
+require_relative "adf_builder/base/base"
+require_relative "adf_builder/base/prospect"
+require_relative "adf_builder/base/request_date"
 
 # PROVIDER
-require_relative 'adf_builder/provider/provider'
+require_relative "adf_builder/provider/provider"
 
 # SHARED
-require_relative 'adf_builder/shared/id'
-require_relative 'adf_builder/shared/contact'
+require_relative "adf_builder/shared/id"
+require_relative "adf_builder/shared/contact"
 
 # VEHICLES
-require_relative 'adf_builder/vehicles/vehicles'
-require_relative 'adf_builder/vehicles/colorcombinations'
-require_relative 'adf_builder/vehicles/price'
+require_relative "adf_builder/vehicles/vehicles"
+require_relative "adf_builder/vehicles/colorcombinations"
+require_relative "adf_builder/vehicles/price"
 
 # VENDOR
-require_relative 'adf_builder/vendor/vendor'
+require_relative "adf_builder/vendor/vendor"
 
 module AdfBuilder
   class Error < StandardError; end
+
   class Builder
     def initialize
-      @doc = self.init_doc
+      @doc = init_doc
       @base = Base.new(@doc)
     end
 
@@ -51,17 +52,17 @@ module AdfBuilder
       prospect = Ox::Element.new("prospect")
 
       request_date = Ox::Element.new("requestdate")
-      request_date << '2000-03-30T15:30:20-08:00'
+      request_date << "2000-03-30T15:30:20-08:00"
 
-      vehicle = Ox::Element.new('vehicle')
+      vehicle = Ox::Element.new("vehicle")
       year = Ox::Element.new("year")
-      year << '1999'
+      year << "1999"
 
       make = Ox::Element.new("make")
-      make << 'Chevrolet'
+      make << "Chevrolet"
 
       model = Ox::Element.new("model")
-      model << 'Blazer'
+      model << "Blazer"
 
       vehicle << year << make << model
 
@@ -70,11 +71,11 @@ module AdfBuilder
       contact = Ox::Element.new("contact")
 
       name = Ox::Element.new("name")
-      name[:part] = 'full'
-      name << 'John Doe'
+      name[:part] = "full"
+      name << "John Doe"
 
       phone = Ox::Element.new("phone")
-      phone << '393-999-3922'
+      phone << "393-999-3922"
 
       contact << name << phone
       customer << contact
@@ -83,8 +84,8 @@ module AdfBuilder
 
       contact = Ox::Element.new("contact")
       name = Ox::Element.new("name")
-      name[:part] = 'full'
-      name << 'Acura of Bellevue'
+      name[:part] = "full"
+      name << "Acura of Bellevue"
 
       contact << name
       vendor << contact
@@ -104,11 +105,11 @@ module AdfBuilder
     def init_doc
       doc = Ox::Document.new
       instruct = Ox::Instruct.new(:xml)
-      instruct[:version] = '1.0'
+      instruct[:version] = "1.0"
       doc << instruct
       doc << Ox::Raw.new("")
-      instruct = Ox::Instruct.new('ADF')
-      instruct[:version] = '1.0'
+      instruct = Ox::Instruct.new("ADF")
+      instruct[:version] = "1.0"
       doc << instruct
       adf = Ox::Element.new("adf")
       doc << adf
@@ -116,10 +117,10 @@ module AdfBuilder
     end
 
     # we will either create a new node with the value or replace the one if it is available
-    def self.update_node(parent_node, key, value, params={})
+    def self.update_node(parent_node, key, value, params = {})
       key = key.to_s
       value = value.to_s
-      if parent_node.locate(key).size > 0
+      if parent_node.locate(key).size.positive?
         node = parent_node.locate(key).first
         node.replace_text(value)
       else
@@ -133,12 +134,13 @@ module AdfBuilder
     # update the params by first checking if they are valid params and then checking if the values are valid if necessary
     def self.update_params(node, key, params)
       return true if params.empty?
+
       key = key.to_sym
       valid_values = params[:valid_values]
       valid_parameters = params[:valid_parameters]
-      _params = AdfBuilder::Builder.whitelabel_params(params,valid_parameters, key)
-      _params.each do |k,v|
-        node[k] = v if valid_values[key][k] == true or valid_values[key][k].include? v.to_s
+      _params = AdfBuilder::Builder.whitelabel_params(params, valid_parameters, key)
+      _params.each do |k, v|
+        node[k] = v if (valid_values[key][k] == true) || valid_values[key][k].include?(v.to_s)
       end
     end
 
@@ -149,7 +151,7 @@ module AdfBuilder
 
     def self.valid_child?(parent, tag_name, index)
       child = parent.locate(tag_name)[index]
-      return !child.nil?,child
+      [!child.nil?, child]
     end
   end
 end

@@ -1,4 +1,10 @@
 ## [Unreleased]
+
+## [0.4.0] - 2026-01-19
+- Modernized dependencies
+  - Updated `ox` to `~> 2.14.23` for better compatibility
+  - Added compatibility for Ruby 3.4.x
+  - Updated development dependencies (RSpec, Rubocop, Rake)
 - Vehicle Structure - Remaining Optional Tags that are not free text
   - option
   - finance

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AdfBuilder
   class Base
     # initialize the prospect, id, and requestdate node
@@ -6,8 +8,6 @@ module AdfBuilder
       @prospect = Prospect.new(@doc)
     end
 
-    def prospect
-      @prospect
-    end
+    attr_reader :prospect
   end
 end

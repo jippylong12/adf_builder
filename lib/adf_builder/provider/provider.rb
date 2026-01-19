@@ -1,8 +1,8 @@
+# frozen_string_literal: true
+
 module AdfBuilder
   class Provider
-
-
-    FREE_TEXT_OPTIONAL_TAGS = [:service, :url]
+    FREE_TEXT_OPTIONAL_TAGS = %i[service url].freeze
 
     def initialize(prospect)
       @prospect = prospect
@@ -10,41 +10,39 @@ module AdfBuilder
       @contact = nil
     end
 
-    def contact
-      @contact
-    end
+    attr_reader :contact
 
-
-    def add(name, params={})
-      @provider = Ox::Element.new('provider')
-      params.merge!({valid_values: AdfBuilder::Contact::VALID_VALUES, valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS})
-      AdfBuilder::Builder.update_node(@provider, :name, name,  params)
+    def add(name, params = {})
+      @provider = Ox::Element.new("provider")
+      params.merge!({ valid_values: AdfBuilder::Contact::VALID_VALUES,
+                      valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS })
+      AdfBuilder::Builder.update_node(@provider, :name, name, params)
       @prospect << @provider
     end
 
-    def add_contact(name, opts={})
+    def add_contact(name, opts = {})
       @contact = Contact.new(@provider, name, opts)
     end
 
-    def add_phone(phone, params={})
-      params.merge!({valid_values: AdfBuilder::Contact::VALID_VALUES, valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS})
-      AdfBuilder::Builder.update_node(@provider, :phone, phone,  params)
+    def add_phone(phone, params = {})
+      params.merge!({ valid_values: AdfBuilder::Contact::VALID_VALUES,
+                      valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS })
+      AdfBuilder::Builder.update_node(@provider, :phone, phone, params)
     end
 
-    def add_email(email, params={})
-      params.merge!({valid_values: AdfBuilder::Contact::VALID_VALUES, valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS})
-      AdfBuilder::Builder.update_node(@provider, :email, email,  params)
+    def add_email(email, params = {})
+      params.merge!({ valid_values: AdfBuilder::Contact::VALID_VALUES,
+                      valid_parameters: AdfBuilder::Contact::VALID_PARAMETERS })
+      AdfBuilder::Builder.update_node(@provider, :email, email, params)
     end
 
     def update_tags_with_free_text(tags)
       tags.each do |key, value|
-        if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
-          AdfBuilder::Builder.update_node(@provider, key, value)
-        end
+        AdfBuilder::Builder.update_node(@provider, key, value) if FREE_TEXT_OPTIONAL_TAGS.include? key.to_sym
       end
     end
 
-    def add_id(index, value, source=nil, sequence=1)
+    def add_id(index, value, source = nil, sequence = 1)
       if @prospect.locate("provider").empty?
         false
       else
