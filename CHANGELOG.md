@@ -1,3 +1,8 @@
+## [1.1.0] - 2026-01-19
+- **Feature Complete**: Implemented all ADF 1.0 nodes and attributes including `Vendor`, `Provider`, and complex `Vehicle` tags (`Finance`, `Option`, `Odometer`, `ColorCombination`, `ImageTag`, `Price`).
+- **Singular Field logic**: Methods for singular fields (e.g. `vehicle.year`) now correctly replace existing values instead of appending.
+- **Removed Legacy Code**: Cleaned up deprecated legacy implementation directories.
+
 ## [1.0.0] - 2026-01-19
 - **MAJOR OVERHAUL**: Complete rewrtie of the library architecture.
 - **New Block-based DSL**: Intuitive API for building ADF documents (`AdfBuilder.build { vehicle { ... } }`).

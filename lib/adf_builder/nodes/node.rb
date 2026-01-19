@@ -5,15 +5,21 @@ module AdfBuilder
     class Node
       include AdfBuilder::Validations
 
-      attr_reader :children, :attributes
+      attr_reader :children, :attributes, :value, :tag_name
 
       def initialize
         @children = []
         @attributes = {}
+        @value = nil
+        @tag_name = nil
       end
 
       def add_child(node)
         @children << node
+      end
+
+      def remove_children(tag_name)
+        @children.reject! { |c| c.tag_name == tag_name }
       end
 
       def to_xml
@@ -57,7 +63,6 @@ module AdfBuilder
         @attributes = attributes
         @value = value
       end
-      attr_reader :tag_name, :value
     end
 
     class Root < Node

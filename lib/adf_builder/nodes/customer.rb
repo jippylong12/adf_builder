@@ -3,56 +3,56 @@
 module AdfBuilder
   module Nodes
     class Customer < Node
+      def initialize
+        super
+        @tag_name = :customer
+      end
+
       def contact(&block)
+        remove_children(:contact)
         contact = Contact.new
         contact.instance_eval(&block) if block_given?
         add_child(contact)
       end
+
+      def id(value, sequence: nil, source: nil)
+        # id* is multiple
+        add_child(Id.new(value, sequence: sequence, source: source))
+      end
+
+      def timeframe(&block)
+        remove_children(:timeframe)
+        tf = Timeframe.new
+        tf.instance_eval(&block) if block_given?
+        add_child(tf)
+      end
+
+      def comments(value)
+        remove_children(:comments)
+        add_child(GenericNode.new(:comments, {}, value))
+      end
     end
 
-    class Contact < Node
-      def name(value, part: nil, type: nil)
-        name_node = Name.new(value, part: part, type: type)
-        add_child(name_node)
+    class Timeframe < Node
+      def initialize
+        super
+        @tag_name = :timeframe
       end
 
-      def email(value)
-        add_child(SimpleElement.new(:email, value))
+      def description(value)
+        remove_children(:description)
+        add_child(GenericNode.new(:description, {}, value))
       end
 
-      def phone(value, type: nil)
-        phone_node = Phone.new(value, type: type)
-        add_child(phone_node)
+      def earliestdate(value)
+        remove_children(:earliestdate)
+        add_child(GenericNode.new(:earliestdate, {}, value))
       end
-    end
 
-    class Name < Node
-      def initialize(value, part: nil, type: nil)
-        super()
-        @value = value
-        @attributes[:part] = part if part
-        @attributes[:type] = type if type
+      def latestdate(value)
+        remove_children(:latestdate)
+        add_child(GenericNode.new(:latestdate, {}, value))
       end
-      attr_reader :value
-    end
-
-    class Phone < Node
-      def initialize(value, type: nil)
-        super()
-        @value = value
-        @attributes[:type] = type if type
-      end
-      attr_reader :value
-    end
-
-    # Simple Helper for tags like <email>foo</email>
-    class SimpleElement < Node
-      def initialize(tag_name, value)
-        super()
-        @tag_name = tag_name
-        @value = value
-      end
-      attr_reader :value, :tag_name
     end
   end
 end

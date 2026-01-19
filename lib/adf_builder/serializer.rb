@@ -41,7 +41,7 @@ module AdfBuilder
     def serialize_node(node, parent_element)
       # Determine element name using tag_name to avoid conflict with DSL methods like 'name'
       # Safest check: Does it have the instance variable set?
-      element_name = if node.instance_variable_defined?(:@tag_name)
+      element_name = if node.instance_variable_defined?(:@tag_name) && node.instance_variable_get(:@tag_name)
                        node.instance_variable_get(:@tag_name).to_s
                      else
                        node.class.name.split("::").last.downcase
@@ -75,7 +75,10 @@ module AdfBuilder
     end
 
     def attribute?(key)
-      %i[part type status sequence source id valid preferredcontact time].include?(key)
+      %i[
+        part type status sequence source id valid preferredcontact time
+        interest units width height alttext limit currency delta relativeto line
+      ].include?(key)
     end
   end
 end

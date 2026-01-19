@@ -19,6 +19,18 @@ module AdfBuilder
         add_child(customer)
       end
 
+      def vendor(&block)
+        vendor = Vendor.new
+        vendor.instance_eval(&block) if block_given?
+        add_child(vendor)
+      end
+
+      def provider(&block)
+        provider = Provider.new
+        provider.instance_eval(&block) if block_given?
+        add_child(provider)
+      end
+
       # Helpers for Editing
       def vehicles
         @children.select { |c| c.is_a?(Vehicle) }
