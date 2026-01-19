@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    adf_builder (0.4.0)
+    adf_builder (1.0.0)
       ox (~> 2.14)
 
 GEM
@@ -13,6 +13,8 @@ GEM
     json (2.18.0)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
+    nokogiri (1.19.0-arm64-darwin)
+      racc (~> 1.4)
     ox (2.14.23)
       bigdecimal (>= 3.0)
     parallel (1.27.0)
@@ -62,6 +64,7 @@ PLATFORMS
 
 DEPENDENCIES
   adf_builder!
+  nokogiri (~> 1.15)
   rake (~> 13.2)
   rspec (~> 3.13)
   rubocop (~> 1.70)

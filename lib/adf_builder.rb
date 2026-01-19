@@ -29,6 +29,16 @@ require_relative "adf_builder/vehicles/price"
 # VENDOR
 require_relative "adf_builder/vendor/vendor"
 
+# v1.0 DSL
+# v1.0 DSL
+require_relative "adf_builder/validations"
+require_relative "adf_builder/nodes/node"
+require_relative "adf_builder/nodes/prospect"
+require_relative "adf_builder/nodes/vehicle"
+require_relative "adf_builder/nodes/customer"
+require_relative "adf_builder/serializer"
+require_relative "adf_builder/dsl"
+
 module AdfBuilder
   class Error < StandardError; end
 
