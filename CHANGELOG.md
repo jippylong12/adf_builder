@@ -1,3 +1,10 @@
+## [1.4.0] - 2026-01-19
+- **Vendor & Customer Validation Improvements**:
+  - `Vendor`: Now requires `vendorname` and `contact`.
+  - `Customer`: Now requires `contact`.
+  - `Contact`: Refactored to use declarative `validates_presence_of :name` (previously manual check).
+  - Added comprehensive specs for new presence validations.
+
 ## [1.3.1] - 2026-01-19
 - **Validation Refinement**: `Address` now strictly enforces 1 to 5 `street` lines.
 
