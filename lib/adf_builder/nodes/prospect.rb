@@ -3,8 +3,22 @@
 module AdfBuilder
   module Nodes
     class Prospect < Node
+      def validate!
+        super
+        # DTD: (id*, requestdate, vehicle+, customer, vendor, provider?)
+        unless @children.any? { |c| c.tag_name == :requestdate }
+          raise AdfBuilder::Error, "Prospect must have a requestdate"
+        end
+        unless @children.any? { |c| c.is_a?(Vehicle) }
+          raise AdfBuilder::Error, "Prospect must have at least one vehicle"
+        end
+        raise AdfBuilder::Error, "Prospect must have a customer" unless @children.any? { |c| c.is_a?(Customer) }
+        raise AdfBuilder::Error, "Prospect must have a vendor" unless @children.any? { |c| c.is_a?(Vendor) }
+      end
+
       def request_date(date)
-        @attributes[:requestdate] = date
+        remove_children(:requestdate)
+        add_child(GenericNode.new(:requestdate, {}, date))
       end
 
       def vehicle(&block)

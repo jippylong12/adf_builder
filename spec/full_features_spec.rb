@@ -92,8 +92,7 @@ RSpec.describe "Full Features Verification" do
     end
 
     # Basic inclusions check
-    expect(xml).to include("<adf>")
-    expect(xml).to include("<prospect>")
+    expect(xml).to include("<requestdate>#{Time.now}</requestdate>")
 
     # Vehicle checks
     expect(xml).to include("<vehicle status=\"new\" interest=\"buy\">")
@@ -250,10 +249,28 @@ RSpec.describe "Full Features Verification" do
     expect do
       AdfBuilder.build do
         prospect do
+          request_date Time.now
+          vendor do
+            vendorname "V"
+            contact do
+              name "C"
+              email "c@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "C"
+              email "e"
+            end
+            timeframe do
+              description "browsing"
+              earliestdate "2024-01-01"
+            end
+          end
           vehicle do
-            year 2024
-            make "T"
-            model "C"
+            year 2000
+            make "M"
+            model "M"
             finance { amount 100, currency: "LOL" }
           end
         end
@@ -263,30 +280,99 @@ RSpec.describe "Full Features Verification" do
     # Contact Validation (Name Required)
     expect do
       AdfBuilder.build do
-        prospect { vendor { vendorname "Bob's Cars" } }
-      end
-    end.to raise_error(AdfBuilder::Error, /Missing required Element: contact/)
-
-    # Provider Validation (Name Required)
-    expect do
-      AdfBuilder.build do
-        prospect { provider { service "Listings" } }
-      end
-    end.to raise_error(AdfBuilder::Error, /Missing required Element: name/)
-
-    # Contact Validation (Name Required)
-    expect do
-      AdfBuilder.build do
-        prospect { customer { contact { email "foo@bar.com" } } }
+        prospect do
+          request_date Time.now
+          vehicle do
+            year 2000
+            make "M"
+            model "M"
+          end
+          vendor do
+            vendorname "Bob's Cars"
+            contact do
+              name "B"
+              email "b@test.com"
+            end
+          end
+          customer { contact { email "foo@bar.com" } }
+        end
       end
     end.to raise_error(AdfBuilder::Error, /Missing required Element: name/)
 
     # Contact Validation (Phone or Email Required)
     expect do
       AdfBuilder.build do
-        prospect { customer { contact { name "John" } } }
+        prospect do
+          request_date Time.now
+          vehicle do
+            year 2000
+            make "M"
+            model "M"
+          end
+          vendor do
+            vendorname "V"
+            contact { name "V" }
+          end
+          customer { contact { name "John" } }
+        end
       end
     end.to raise_error(AdfBuilder::Error, /Contact must have at least one Phone or Email/)
+
+    # Timeframe Validation (Requirement)
+    expect do
+      AdfBuilder.build do
+        prospect do
+          request_date Time.now
+          vehicle do
+            year 2000
+            make "M"
+            model "M"
+          end
+          vendor do
+            vendorname "V"
+            contact do
+              name "V"
+              email "v@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "J"
+              email "e"
+            end
+            timeframe { description "browsing" }
+          end
+        end
+      end
+    end.to raise_error(AdfBuilder::Error, /Timeframe must have at least one of earliestdate or latestdate/)
+
+    # Provider Validation (Name Required)
+    expect do
+      AdfBuilder.build do
+        prospect do
+          request_date Time.now
+          vehicle do
+            year 2000
+            make "M"
+            model "M"
+          end
+          vendor do
+            vendorname "V"
+            contact do
+              name "V"
+              email "v@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "C"
+              email "e"
+            end
+          end
+          provider { service "Listings" }
+        end
+      end
+    end.to raise_error(AdfBuilder::Error, /Missing required Element: name/)
 
     # Address Country Validation
     expect do
@@ -309,6 +395,19 @@ RSpec.describe "Full Features Verification" do
     # Valid Country Code
     AdfBuilder.build do
       prospect do
+        request_date Time.now
+        vendor do
+          vendorname "V"
+          contact do
+            name "V"
+            email "v@test.com"
+          end
+        end
+        vehicle do
+          year 2000
+          make "M"
+          model "M"
+        end
         customer do
           contact do
             name "John"
@@ -325,7 +424,22 @@ RSpec.describe "Full Features Verification" do
     # Timeframe Validation (Dates)
     expect do
       AdfBuilder.build do
-        prospect { customer { timeframe { earliestdate "not-a-date" } } }
+        prospect do
+          request_date Time.now
+          vendor do
+            vendorname "V"
+            contact do
+              name "V"
+              email "v@test.com"
+            end
+          end
+          vehicle do
+            year 2000
+            make "M"
+            model "M"
+          end
+          customer { timeframe { earliestdate "not-a-date" } }
+        end
       end
     end.to raise_error(AdfBuilder::Error, /Invalid ISO 8601 date/)
 

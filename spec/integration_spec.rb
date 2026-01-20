@@ -8,6 +8,13 @@ RSpec.describe "Integration: Full Lead" do
     xml = AdfBuilder.build do
       prospect do
         request_date Time.now
+        vendor do
+          vendorname "V"
+          contact do
+            name "C"
+            email "c@test.com"
+          end
+        end
 
         # Multiple Vehicles
         vehicle do

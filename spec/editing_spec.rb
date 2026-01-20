@@ -9,6 +9,19 @@ RSpec.describe "Editing Workflow" do
     tree = AdfBuilder.tree do
       prospect do
         request_date Time.now
+        vendor do
+          vendorname "V"
+          contact do
+            name "C"
+            email "c@test.com"
+          end
+        end
+        customer do
+          contact do
+            name "C"
+            email "e"
+          end
+        end
         vehicle do
           year 2020
           make "Ford"

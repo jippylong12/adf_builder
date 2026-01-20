@@ -8,6 +8,20 @@ RSpec.describe AdfBuilder::Validations do
       expect do
         AdfBuilder.build do
           prospect do
+            request_date Time.now
+            vendor do
+              vendorname "V"
+              contact do
+                name "C"
+                email "c@test.com"
+              end
+            end
+            customer do
+              contact do
+                name "C"
+                email "e"
+              end
+            end
             vehicle do
               year 2021
               make "Toyota"
@@ -23,6 +37,20 @@ RSpec.describe AdfBuilder::Validations do
       expect do
         AdfBuilder.build do
           prospect do
+            request_date Time.now
+            vendor do
+              vendorname "V"
+              contact do
+                name "C"
+                email "c@test.com"
+              end
+            end
+            customer do
+              contact do
+                name "C"
+                email "e"
+              end
+            end
             vehicle do
               year 2021
               make "Toyota"

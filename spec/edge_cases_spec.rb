@@ -8,6 +8,25 @@ RSpec.describe "Edge Cases & Dynamic Support" do
     it "supports arbitrary tags via method_missing" do
       xml = AdfBuilder.build do
         prospect do
+          vendor do
+            vendorname "V"
+            contact do
+              name "C"
+              email "c@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "C"
+              email "e"
+            end
+          end
+          vehicle do
+            year 2000
+            make "M"
+            model "M"
+          end
+
           # Standard
           request_date Time.now
 
@@ -45,6 +64,20 @@ RSpec.describe "Edge Cases & Dynamic Support" do
     it "escapes special characters in values" do
       xml = AdfBuilder.build do
         prospect do
+          request_date Time.now
+          vendor do
+            vendorname "V"
+            contact do
+              name "C"
+              email "c@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "C"
+              email "e"
+            end
+          end
           vehicle do
             year 2021
             make "Toyota"
@@ -64,6 +97,25 @@ RSpec.describe "Edge Cases & Dynamic Support" do
     it "handles deep nesting of standard and non-standard tags" do
       xml = AdfBuilder.build do
         prospect do
+          request_date Time.now
+          vendor do
+            vendorname "V"
+            contact do
+              name "C"
+              email "c@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "C"
+              email "e"
+            end
+          end
+          vehicle do
+            year 2000
+            make "M"
+            model "M"
+          end
           level_1 do
             level_2 do
               level_3 "Deep Value"

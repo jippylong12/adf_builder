@@ -8,6 +8,20 @@ RSpec.describe AdfBuilder::DSL do
     it "builds a valid ADF XML document" do
       xml_output = AdfBuilder.build do
         prospect do
+          request_date Time.now
+          vendor do
+            vendorname "V"
+            contact do
+              name "C"
+              email "c@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "C"
+              email "e"
+            end
+          end
           vehicle do
             year 2021
             make "Ford"
