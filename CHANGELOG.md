@@ -1,4 +1,4 @@
-## [1.1.1] - 2026-01-19
+## [1.2.0] - 2026-01-19
 - **Strict Validations**: Added validation for `Vehicle` condition, `Option` weighting (range), `Finance` method, and required `ID` source.
 
 ## [1.1.0] - 2026-01-19
