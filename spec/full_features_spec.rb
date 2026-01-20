@@ -238,7 +238,7 @@ RSpec.describe "Full Features Verification" do
       AdfBuilder.build do
         prospect { customer { contact { email "foo@bar.com" } } }
       end
-    end.to raise_error(AdfBuilder::Error, /Contact must have a Name/)
+    end.to raise_error(AdfBuilder::Error, /Missing required Element: name/)
 
     # Contact Validation (Phone or Email Required)
     expect do
@@ -291,7 +291,15 @@ RSpec.describe "Full Features Verification" do
     # Timeframe Validation (Requirement)
     expect do
       AdfBuilder.build do
-        prospect { customer { timeframe { description "browsing" } } }
+        prospect do
+          customer do
+            contact do
+              name "J"
+              email "e"
+            end
+            timeframe { description "browsing" }
+          end
+        end
       end
     end.to raise_error(AdfBuilder::Error, /Timeframe must have at least one of earliestdate or latestdate/)
   end

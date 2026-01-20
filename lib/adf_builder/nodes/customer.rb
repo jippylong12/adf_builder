@@ -7,6 +7,8 @@ module AdfBuilder
         super
         @tag_name = :customer
       end
+      validates_presence_of :contact
+
 
       def contact(&block)
         remove_children(:contact)

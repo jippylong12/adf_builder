@@ -94,6 +94,7 @@ module AdfBuilder
 
     class Contact < Node
       validates_inclusion_of :primarycontact, in: [0, 1, "0", "1"]
+      validates_presence_of :name
 
       def initialize(primary_contact: nil)
         super()
@@ -103,9 +104,6 @@ module AdfBuilder
 
       def validate!
         super
-        # Custom Validation: Name is required
-        raise AdfBuilder::Error, "Contact must have a Name" unless @children.any? { |c| c.tag_name == :name }
-
         # Custom Validation: At least one Phone OR Email
         return if @children.any? { |c| %i[phone email].include?(c.tag_name) }
 
