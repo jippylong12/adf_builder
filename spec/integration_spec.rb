@@ -26,7 +26,7 @@ RSpec.describe "Integration: Full Lead" do
           contact do
             name "John Doe", part: "full"
             email "john@example.com"
-            phone "555-1234", type: "cell"
+            phone "555-1234", type: "cellphone"
           end
         end
       end
@@ -47,6 +47,6 @@ RSpec.describe "Integration: Full Lead" do
 
     phone_node = doc.at_xpath("//adf/prospect/customer/contact/phone")
     expect(phone_node.text).to eq("555-1234")
-    expect(phone_node["type"]).to eq("cell")
+    expect(phone_node["type"]).to eq("cellphone")
   end
 end

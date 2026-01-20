@@ -1,3 +1,10 @@
+## [1.3.0] - 2026-01-19
+- **Customer & Contact Validations**:
+  - `Contact`: Requires Name and at least one Phone or Email.
+  - `Address`: Validates Country against ISO 3166-1 alpha-2 codes.
+  - `Timeframe`: Validates ISO 8601 dates and requires earliest/latest date if present.
+  - `Phone/Email`: Enforces valid types and preference flags.
+
 ## [1.2.2] - 2026-01-19
 - **Strict Validations**: Added ISO 4217 currency validation for `Price`, `Amount`, and `Balance`.
 

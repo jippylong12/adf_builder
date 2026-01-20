@@ -31,7 +31,11 @@ module AdfBuilder
           next if value.nil?
 
           allowed = validation[:in]
-          unless allowed.include?(value)
+          # Normalize for comparison (allow string/symbol interchangeably)
+          value_s = value.to_s
+          allowed_s = allowed.map(&:to_s)
+
+          unless allowed_s.include?(value_s)
             raise AdfBuilder::Error,
                   "Invalid value for #{validation[:attribute]}: #{value}. Allowed: #{allowed.join(", ")}"
           end

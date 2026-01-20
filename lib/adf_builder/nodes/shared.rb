@@ -14,7 +14,14 @@ module AdfBuilder
       end
     end
 
+    # Common ISO 3166-1 alpha-2 codes
+    ISO_3166 = %w[US CA MX GB DE FR GR IT ES JP CN IN BR RU ZA AU NZ KR SE NO FI DK NL BE CH].freeze
+
     class Phone < Node
+      validates_inclusion_of :type, in: %i[phone fax cellphone pager]
+      validates_inclusion_of :time, in: %i[morning afternoon evening nopreference day]
+      validates_inclusion_of :preferredcontact, in: [0, 1, "0", "1"]
+
       def initialize(value, type: nil, time: nil, preferredcontact: nil)
         super()
         @tag_name = :phone
@@ -26,6 +33,8 @@ module AdfBuilder
     end
 
     class Email < Node
+      validates_inclusion_of :preferredcontact, in: [0, 1, "0", "1"]
+
       def initialize(value, preferredcontact: nil)
         super()
         @tag_name = :email
@@ -35,6 +44,9 @@ module AdfBuilder
     end
 
     class Name < Node
+      validates_inclusion_of :part, in: %i[first middle suffix last full]
+      validates_inclusion_of :type, in: %i[individual business]
+
       def initialize(value, part: nil, type: nil)
         super()
         @tag_name = :name
@@ -45,6 +57,9 @@ module AdfBuilder
     end
 
     class Address < Node
+      validates_inclusion_of :type, in: %i[work home delivery]
+      validates_inclusion_of :country, in: ISO_3166
+
       def initialize(type: nil)
         super()
         @tag_name = :address
@@ -52,6 +67,9 @@ module AdfBuilder
       end
 
       def street(value, line: nil)
+        # Line validation 1-5
+        raise AdfBuilder::Error, "Street line must be 1-5" if line && !line.to_s.match?(/^[1-5]$/)
+
         node = GenericNode.new(:street, { line: line }.compact, value)
         add_child(node)
       end
@@ -59,16 +77,33 @@ module AdfBuilder
       # Simple elements
       %i[apartment city regioncode postalcode country].each do |tag|
         define_method(tag) do |value|
+          if tag == :country && !ISO_3166.include?(value.to_s.upcase)
+            raise AdfBuilder::Error, "Invalid country code: #{value}"
+          end
+
           add_child(GenericNode.new(tag, {}, value))
         end
       end
     end
 
     class Contact < Node
-      def initialize(primary_contact: false)
+      validates_inclusion_of :primarycontact, in: [0, 1, "0", "1"]
+
+      def initialize(primary_contact: nil)
         super()
         @tag_name = :contact
-        # primary_contact might be useful for logic but not an attribute
+        @attributes[:primarycontact] = primary_contact if primary_contact
+      end
+
+      def validate!
+        super
+        # Custom Validation: Name is required
+        raise AdfBuilder::Error, "Contact must have a Name" unless @children.any? { |c| c.tag_name == :name }
+
+        # Custom Validation: At least one Phone OR Email
+        return if @children.any? { |c| %i[phone email].include?(c.tag_name) }
+
+        raise AdfBuilder::Error, "Contact must have at least one Phone or Email"
       end
 
       def name(value, part: nil, type: nil)

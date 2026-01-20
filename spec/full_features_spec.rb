@@ -41,14 +41,14 @@ RSpec.describe "Full Features Verification" do
         customer do
           contact do
             name "Jane Doe", part: :full, type: :individual
-            phone "555-0199", type: :cell, time: :evening, preferredcontact: 1
+            phone "555-0199", type: :cellphone, time: :evening, preferredcontact: 1
             email "jane@example.com", preferredcontact: 1
             address type: :home do
-              street "123 Main St", line: 1
-              city "Austin"
-              regioncode "TX"
-              postalcode "78701"
-              country "USA"
+              street "123 Maplestreet", line: 1
+              city "Spokane"
+              regioncode "WA"
+              postalcode "98002"
+              country "US"
             end
           end
 
@@ -65,7 +65,7 @@ RSpec.describe "Full Features Verification" do
           url "http://bestdealer.com"
           contact do
             name "Sales Manager"
-            phone "555-9999", type: :work
+            phone "555-9999", type: :phone
           end
         end
 
@@ -96,7 +96,7 @@ RSpec.describe "Full Features Verification" do
     expect(xml).to include("<contact>")
     expect(xml).to include("<name part=\"full\" type=\"individual\">Jane Doe</name>")
     expect(xml).to include("<address type=\"home\">")
-    expect(xml).to include("<street line=\"1\">123 Main St</street>")
+    expect(xml).to include('<street line="1">123 Maplestreet</street>')
     expect(xml).to include("<timeframe>")
     expect(xml).to include("<description>ASAP</description>")
     expect(xml).to include("<comments>Looking for a good deal.</comments>")
@@ -232,5 +232,61 @@ RSpec.describe "Full Features Verification" do
         end
       end
     end.to raise_error(AdfBuilder::Error, /Invalid value for currency: LOL/)
+
+    # Contact Validation (Name Required)
+    expect do
+      AdfBuilder.build do
+        prospect { customer { contact { email "foo@bar.com" } } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Contact must have a Name/)
+
+    # Contact Validation (Phone or Email Required)
+    expect do
+      AdfBuilder.build do
+        prospect { customer { contact { name "John" } } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Contact must have at least one Phone or Email/)
+
+    # Address Country Validation
+    expect do
+      AdfBuilder.build do
+        prospect do
+          customer do
+            contact do
+              name "John"
+              email "a@b.c"
+              address { country "XX" }
+            end
+          end
+        end
+      end
+    end.to raise_error(AdfBuilder::Error, /Invalid country code: XX/)
+
+    # Valid Country Code
+    AdfBuilder.build do
+      prospect do
+        customer do
+          contact do
+            name "John"
+            email "a@b.c"
+            address { country "US" }
+          end
+        end
+      end
+    end
+
+    # Timeframe Validation (Dates)
+    expect do
+      AdfBuilder.build do
+        prospect { customer { timeframe { earliestdate "not-a-date" } } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Invalid ISO 8601 date/)
+
+    # Timeframe Validation (Requirement)
+    expect do
+      AdfBuilder.build do
+        prospect { customer { timeframe { description "browsing" } } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Timeframe must have at least one of earliestdate or latestdate/)
   end
 end

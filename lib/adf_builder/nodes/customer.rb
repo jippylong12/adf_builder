@@ -39,19 +39,40 @@ module AdfBuilder
         @tag_name = :timeframe
       end
 
+      def validate!
+        super
+        # If timeframe is present, earliestdate or latestdate is required
+        return if @children.any? { |c| %i[earliestdate latestdate].include?(c.tag_name) }
+
+        raise AdfBuilder::Error, "Timeframe must have at least one of earliestdate or latestdate"
+      end
+
       def description(value)
         remove_children(:description)
         add_child(GenericNode.new(:description, {}, value))
       end
 
       def earliestdate(value)
+        validate_iso8601(value)
         remove_children(:earliestdate)
         add_child(GenericNode.new(:earliestdate, {}, value))
       end
 
       def latestdate(value)
+        validate_iso8601(value)
         remove_children(:latestdate)
         add_child(GenericNode.new(:latestdate, {}, value))
+      end
+
+      private
+
+      def validate_iso8601(value)
+        # Simple ISO 8601 check (YYYY-MM-DDT...)
+        # Using a basic regex for now or standard library
+        require "date"
+        Date.iso8601(value.to_s)
+      rescue ArgumentError
+        raise AdfBuilder::Error, "Invalid ISO 8601 date: #{value}"
       end
     end
   end
