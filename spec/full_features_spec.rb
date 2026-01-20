@@ -204,5 +204,33 @@ RSpec.describe "Full Features Verification" do
         end
       end
     end.to raise_error(AdfBuilder::Error, /Missing required Element: make/)
+
+    # Currency Validation (Price)
+    expect do
+      AdfBuilder.build do
+        prospect do
+          vehicle do
+            year 2024
+            make "T"
+            model "C"
+            price 100, currency: "XYZ"
+          end
+        end
+      end
+    end.to raise_error(AdfBuilder::Error, /Invalid value for currency: XYZ/)
+
+    # Currency Validation (Amount)
+    expect do
+      AdfBuilder.build do
+        prospect do
+          vehicle do
+            year 2024
+            make "T"
+            model "C"
+            finance { amount 100, currency: "LOL" }
+          end
+        end
+      end
+    end.to raise_error(AdfBuilder::Error, /Invalid value for currency: LOL/)
   end
 end

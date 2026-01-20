@@ -1,3 +1,6 @@
+## [1.2.2] - 2026-01-19
+- **Strict Validations**: Added ISO 4217 currency validation for `Price`, `Amount`, and `Balance`.
+
 ## [1.2.1] - 2026-01-19
 - **Strict Validations**: Added `presence` validation for `Vehicle` (year, make, model required).
 

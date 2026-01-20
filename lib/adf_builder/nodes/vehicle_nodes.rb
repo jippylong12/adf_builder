@@ -67,10 +67,21 @@ module AdfBuilder
       end
     end
 
+    # Common ISO 4217 codes (Top valid ones per spec/common usage)
+    # Keeping it as a constant for reuse.
+    # This list can be expanded but covers major currencies.
+    ISO_4217 = %w[
+      USD EUR GBP JPY AUD CAD CHF CNY SEK NZD
+      MXN SGD HKD NOK KRW TRY RUB INR BRL ZAR
+      DKK PLN TWD THB IDR HUF CZK ILS CLP PHP
+      AED COP SAR MYR RON PEN VND NGN
+    ].freeze
+
     class Price < Node
       validates_inclusion_of :type, in: %i[quote offer msrp invoice call appraisal asking]
       validates_inclusion_of :delta, in: %i[absolute relative percentage]
       validates_inclusion_of :relativeto, in: %i[msrp invoice]
+      validates_inclusion_of :currency, in: ISO_4217
 
       def initialize(value, type: :quote, currency: nil, delta: nil, relativeto: nil, source: nil)
         super()
@@ -87,6 +98,7 @@ module AdfBuilder
     class Amount < Node
       validates_inclusion_of :type, in: %i[downpayment monthly total]
       validates_inclusion_of :limit, in: %i[maximum minimum exact]
+      validates_inclusion_of :currency, in: ISO_4217
 
       def initialize(value, type: :total, limit: :maximum, currency: nil)
         super()
@@ -100,6 +112,7 @@ module AdfBuilder
 
     class Balance < Node
       validates_inclusion_of :type, in: %i[finance residual]
+      validates_inclusion_of :currency, in: ISO_4217
 
       def initialize(value, type: :finance, currency: nil)
         super()
