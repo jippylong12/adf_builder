@@ -1,3 +1,19 @@
+## [1.6.0] - 2026-01-19
+### Added
+- **Comprehensive Test Suite**: Added 343 RSpec tests across 11 new spec files in `spec/comprehensive/`:
+  - `node_spec.rb` - Core Node class tests (initialization, children, method_missing)
+  - `prospect_spec.rb` - Prospect validation and structure tests
+  - `vehicle_spec.rb` - Vehicle elements, attributes, odometer, imagetag, price, options, colors
+  - `customer_spec.rb` - Customer and Contact validation and elements
+  - `address_spec.rb` - Address validation including 1-5 street lines and ISO 3166 country codes
+  - `timeframe_spec.rb` - Timeframe with ISO 8601 date validation
+  - `finance_spec.rb` - Finance method, amount, balance with ISO 4217 currency validation
+  - `vendor_spec.rb` - Vendor validation and elements
+  - `provider_spec.rb` - Provider optional elements and contact
+  - `xml_output_spec.rb` - XML structure, escaping, and serialization
+  - `boundary_spec.rb` - Edge cases: unicode, long strings, deep nesting, stress tests
+  - `error_cases_spec.rb` - Error message quality and validation behavior
+
 ## [1.5.1] - 2026-01-19
 ### Changed
 - **BREAKING**: `Prospect` node now strictly enforces the presence of `requestdate`, `vehicle`, `customer`, and `vendor` child nodes to comply with ADF 1.0 DTD.
