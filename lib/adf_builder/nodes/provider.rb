@@ -7,6 +7,7 @@ module AdfBuilder
         super
         @tag_name = :provider
       end
+      validates_presence_of :name
 
       def id(value, sequence: nil, source: nil)
         add_child(Id.new(value, sequence: sequence, source: source))

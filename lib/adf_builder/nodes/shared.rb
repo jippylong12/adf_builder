@@ -18,7 +18,7 @@ module AdfBuilder
     ISO_3166 = %w[US CA MX GB DE FR GR IT ES JP CN IN BR RU ZA AU NZ KR SE NO FI DK NL BE CH].freeze
 
     class Phone < Node
-      validates_inclusion_of :type, in: %i[phone fax cellphone pager]
+      validates_inclusion_of :type, in: %i[voice fax cellphone pager]
       validates_inclusion_of :time, in: %i[morning afternoon evening nopreference day]
       validates_inclusion_of :preferredcontact, in: [0, 1, "0", "1"]
 

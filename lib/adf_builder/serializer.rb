@@ -83,6 +83,7 @@ module AdfBuilder
       %i[
         part type status sequence source id valid preferredcontact time
         interest units width height alttext limit currency delta relativeto line
+        primarycontact
       ].include?(key)
     end
   end

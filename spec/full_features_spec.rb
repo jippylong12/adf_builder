@@ -70,9 +70,23 @@ RSpec.describe "Full Features Verification" do
         end
 
         provider do
-          name "Lead Source Provider"
-          service "Lead Gen"
-          email "leads@provider.com"
+          name "CarPoint", part: :full
+          service "Used Car Classifieds"
+          url "http://carpoint.msn.com"
+          email "carcomm@carpoint.com"
+          phone "425-555-1212"
+          contact primary_contact: 1 do
+            name "Fred Jones", part: :full
+            email "support@carpoint.com"
+            phone "425-253-2222", type: :voice, time: :day
+            address do
+              street "One Microsoft Way", line: 1
+              city "Redmond"
+              regioncode "WA"
+              postalcode "98052"
+              country "US"
+            end
+          end
         end
       end
     end
@@ -105,7 +119,20 @@ RSpec.describe "Full Features Verification" do
     expect(xml).to include("<vendor>")
     expect(xml).to include("<vendorname>Best Dealership</vendorname>")
     expect(xml).to include("<provider>")
-    expect(xml).to include("<service>Lead Gen</service>")
+    expect(xml).to include('<name part="full">CarPoint</name>')
+    expect(xml).to include("<service>Used Car Classifieds</service>")
+    expect(xml).to include("<url>http://carpoint.msn.com</url>")
+    expect(xml).to include("<email>carcomm@carpoint.com</email>")
+    expect(xml).to include("<phone>425-555-1212</phone>")
+    # Check Provider Contact
+    expect(xml).to include("<contact primarycontact=\"1\">")
+    expect(xml).to include('<name part="full">Fred Jones</name>')
+    expect(xml).to include("<email>support@carpoint.com</email>")
+    expect(xml).to include('<phone type="voice" time="day">425-253-2222</phone>')
+    expect(xml).to include("<address>")
+    expect(xml).to include('<street line="1">One Microsoft Way</street>')
+    expect(xml).to include("<city>Redmond</city>")
+    expect(xml).to include("<country>US</country>")
   end
 
   it "validates enums strictly" do
@@ -232,6 +259,20 @@ RSpec.describe "Full Features Verification" do
         end
       end
     end.to raise_error(AdfBuilder::Error, /Invalid value for currency: LOL/)
+
+    # Contact Validation (Name Required)
+    expect do
+      AdfBuilder.build do
+        prospect { vendor { vendorname "Bob's Cars" } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Missing required Element: contact/)
+
+    # Provider Validation (Name Required)
+    expect do
+      AdfBuilder.build do
+        prospect { provider { service "Listings" } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Missing required Element: name/)
 
     # Contact Validation (Name Required)
     expect do
