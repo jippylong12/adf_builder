@@ -14,11 +14,17 @@ module AdfBuilder
       end
 
       # Simple Text Elements (Singular)
-      %i[year make model vin stock trim doors bodystyle transmission condition pricecomments comments].each do |tag|
+      # Simple Text Elements (Singular)
+      %i[year make model vin stock trim doors bodystyle transmission pricecomments comments].each do |tag|
         define_method(tag) do |value|
           remove_children(tag)
           add_child(GenericNode.new(tag, {}, value))
         end
+      end
+
+      def condition(value)
+        remove_children(:condition)
+        add_child(Condition.new(value))
       end
 
       def interest(value)

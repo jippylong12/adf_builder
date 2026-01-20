@@ -130,5 +130,33 @@ RSpec.describe "Full Features Verification" do
         end
       end
     end.to raise_error(AdfBuilder::Error, /Invalid value for type/)
+
+    # Condition Validation
+    expect do
+      AdfBuilder.build do
+        prospect { vehicle { condition "terrible" } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Invalid condition/)
+
+    # Option Weighting Validation
+    expect do
+      AdfBuilder.build do
+        prospect { vehicle { option { weighting 150 } } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Weighting must be between -100 and 100/)
+
+    # Finance Method Validation
+    expect do
+      AdfBuilder.build do
+        prospect { vehicle { finance { method "steal" } } }
+      end
+    end.to raise_error(AdfBuilder::Error, /Invalid finance method/)
+
+    # ID Source Requirement
+    expect do
+      AdfBuilder.build do
+        prospect { vehicle { id "123" } }
+      end
+    end.to raise_error(ArgumentError, /Source is required/)
   end
 end

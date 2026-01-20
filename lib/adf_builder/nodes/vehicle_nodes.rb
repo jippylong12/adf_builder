@@ -26,6 +26,47 @@ module AdfBuilder
       end
     end
 
+    class Condition < Node
+      VALID_VALUES = %w[excellent good fair poor unknown].freeze
+
+      def initialize(value)
+        super()
+        @tag_name = :condition
+        unless VALID_VALUES.include?(value.to_s.downcase)
+          raise AdfBuilder::Error, "Invalid condition: #{value}. Must be one of: #{VALID_VALUES.join(", ")}"
+        end
+
+        @value = value
+      end
+    end
+
+    class Weighting < Node
+      def initialize(value)
+        super()
+        @tag_name = :weighting
+        int_val = value.to_i
+        unless int_val.between?(-100, 100)
+          raise AdfBuilder::Error, "Weighting must be between -100 and 100. Got: #{value}"
+        end
+
+        @value = value
+      end
+    end
+
+    class FinanceMethod < Node
+      VALID_VALUES = %w[cash finance lease].freeze
+
+      def initialize(value)
+        super()
+        @tag_name = :method
+        unless VALID_VALUES.include?(value.to_s.downcase)
+          raise AdfBuilder::Error, "Invalid finance method: #{value}. Must be one of: #{VALID_VALUES.join(", ")}"
+        end
+
+        @value = value
+      end
+    end
+
     class Price < Node
       validates_inclusion_of :type, in: %i[quote offer msrp invoice call appraisal asking]
       validates_inclusion_of :delta, in: %i[absolute relative percentage]
@@ -76,7 +117,8 @@ module AdfBuilder
       end
 
       def method(value)
-        add_child(GenericNode.new(:method, {}, value))
+        remove_children(:method)
+        add_child(FinanceMethod.new(value))
       end
 
       def amount(value, type: :total, limit: :maximum, currency: nil)
@@ -107,7 +149,7 @@ module AdfBuilder
       end
 
       def weighting(value)
-        add_child(GenericNode.new(:weighting, {}, value))
+        add_child(Weighting.new(value))
       end
 
       def price(value, **attrs)

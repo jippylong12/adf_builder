@@ -3,12 +3,14 @@
 module AdfBuilder
   module Nodes
     class Id < Node
-      def initialize(value, sequence: nil, source: nil)
+      def initialize(value, source:, sequence: nil)
         super()
+        raise ArgumentError, "Source is required" if source.nil?
+
         @tag_name = :id
         @value = value
         @attributes[:sequence] = sequence if sequence
-        @attributes[:source] = source if source
+        @attributes[:source] = source
       end
     end
 

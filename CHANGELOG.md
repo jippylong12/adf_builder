@@ -1,3 +1,6 @@
+## [1.1.1] - 2026-01-19
+- **Strict Validations**: Added validation for `Vehicle` condition, `Option` weighting (range), `Finance` method, and required `ID` source.
+
 ## [1.1.0] - 2026-01-19
 - **Feature Complete**: Implemented all ADF 1.0 nodes and attributes including `Vendor`, `Provider`, and complex `Vehicle` tags (`Finance`, `Option`, `Odometer`, `ColorCombination`, `ImageTag`, `Price`).
 - **Singular Field logic**: Methods for singular fields (e.g. `vehicle.year`) now correctly replace existing values instead of appending.
