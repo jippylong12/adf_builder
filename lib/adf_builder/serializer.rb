@@ -4,8 +4,10 @@ require "ox"
 
 module AdfBuilder
   class Serializer
-    def self.to_xml(node)
-      new(node).to_xml
+    class << self
+      def to_xml(root_node)
+        new(root_node).to_xml
+      end
     end
 
     def initialize(root_node)
@@ -13,7 +15,10 @@ module AdfBuilder
     end
 
     def to_xml
-      doc = Ox::Document.new
+      # Validate the entire tree before serializing to ensure data integrity
+      @root_node.validate!
+
+      doc = Ox::Document.new(version: "1.0")
 
       # XML Instruction
       instruct = Ox::Instruct.new(:xml)

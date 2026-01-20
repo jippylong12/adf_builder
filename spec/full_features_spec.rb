@@ -113,6 +113,9 @@ RSpec.describe "Full Features Verification" do
       AdfBuilder.build do
         prospect do
           vehicle do
+            year 2021
+            make "Toyota"
+            model "Camry"
             status :broken # Invalid
           end
         end
@@ -123,6 +126,9 @@ RSpec.describe "Full Features Verification" do
       AdfBuilder.build do
         prospect do
           vehicle do
+            year 2021
+            make "Toyota"
+            model "Camry"
             finance do
               amount 100, type: :invalid_type
             end
@@ -134,29 +140,69 @@ RSpec.describe "Full Features Verification" do
     # Condition Validation
     expect do
       AdfBuilder.build do
-        prospect { vehicle { condition "terrible" } }
+        prospect do
+          vehicle do
+            year 2021
+            make "T"
+            model "C"
+            condition "terrible"
+          end
+        end
       end
     end.to raise_error(AdfBuilder::Error, /Invalid condition/)
 
     # Option Weighting Validation
     expect do
       AdfBuilder.build do
-        prospect { vehicle { option { weighting 150 } } }
+        prospect do
+          vehicle do
+            year 2021
+            make "T"
+            model "C"
+            option { weighting 150 }
+          end
+        end
       end
     end.to raise_error(AdfBuilder::Error, /Weighting must be between -100 and 100/)
 
     # Finance Method Validation
     expect do
       AdfBuilder.build do
-        prospect { vehicle { finance { method "steal" } } }
+        prospect do
+          vehicle do
+            year 2021
+            make "T"
+            model "C"
+            finance { method "steal" }
+          end
+        end
       end
     end.to raise_error(AdfBuilder::Error, /Invalid finance method/)
 
     # ID Source Requirement
     expect do
       AdfBuilder.build do
-        prospect { vehicle { id "123" } }
+        prospect do
+          vehicle do
+            year 2021
+            make "T"
+            model "C"
+            id "123"
+          end
+        end
       end
     end.to raise_error(ArgumentError, /Source is required/)
+
+    # Required Vehicle Fields (Year, Make, Model)
+    expect do
+      AdfBuilder.build do
+        prospect do
+          vehicle do
+            year 2024
+            # Missing Make and Model
+          end
+        end
+      end
+    end.to raise_error(AdfBuilder::Error, /Missing required Element: make/)
   end
 end

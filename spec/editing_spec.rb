@@ -12,6 +12,7 @@ RSpec.describe "Editing Workflow" do
         vehicle do
           year 2020
           make "Ford"
+          model "Mustang"
           status :new
         end
       end
@@ -28,6 +29,7 @@ RSpec.describe "Editing Workflow" do
     prospect.vehicle do
       year 2023
       make "Tesla"
+      model "Model 3"
     end
 
     # 3. Generate XML

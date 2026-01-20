@@ -5,6 +5,7 @@ module AdfBuilder
     class Vehicle < Node
       validates_inclusion_of :status, in: %i[new used]
       validates_inclusion_of :interest, in: %i[buy lease sell trade-in test-drive]
+      validates_presence_of :year, :make, :model
 
       def initialize
         super

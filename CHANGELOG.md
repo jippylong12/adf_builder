@@ -1,3 +1,6 @@
+## [1.2.1] - 2026-01-19
+- **Strict Validations**: Added `presence` validation for `Vehicle` (year, make, model required).
+
 ## [1.2.0] - 2026-01-19
 - **Strict Validations**: Added validation for `Vehicle` condition, `Option` weighting (range), `Finance` method, and required `ID` source.
 

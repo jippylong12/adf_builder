@@ -9,6 +9,9 @@ RSpec.describe AdfBuilder::Validations do
         AdfBuilder.build do
           prospect do
             vehicle do
+              year 2021
+              make "Toyota"
+              model "Camry"
               status :broken # Invalid
             end
           end
@@ -21,6 +24,9 @@ RSpec.describe AdfBuilder::Validations do
         AdfBuilder.build do
           prospect do
             vehicle do
+              year 2021
+              make "Toyota"
+              model "Camry"
               status :new
             end
           end

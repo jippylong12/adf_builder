@@ -46,6 +46,9 @@ RSpec.describe "Edge Cases & Dynamic Support" do
       xml = AdfBuilder.build do
         prospect do
           vehicle do
+            year 2021
+            make "Toyota"
+            model "Camry"
             comments "This & That < Other >"
           end
         end
