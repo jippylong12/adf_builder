@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    adf_builder (1.4.0)
+    adf_builder (1.5.0)
       ox (~> 2.14)
 
 GEM

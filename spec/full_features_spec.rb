@@ -65,7 +65,7 @@ RSpec.describe "Full Features Verification" do
           url "http://bestdealer.com"
           contact do
             name "Sales Manager"
-            phone "555-9999", type: :phone
+            phone "555-9999", type: :voice
           end
         end
 

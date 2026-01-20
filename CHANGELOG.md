@@ -1,3 +1,11 @@
+## [1.5.0] - 2026-01-19
+- **Provider Node Support**:
+  - Implemented `Provider` node with support for `name`, `service`, `url`, `email`, `phone`, and `contact`.
+  - Enforced `name` presence for `Provider`.
+- **Validation Improvements**:
+  - `Phone`: Updated allowed types to include `:voice` and removed `:phone` (strictly following spec).
+  - `Serializer`: Fixed `primarycontact` being serialized as a child element instead of an attribute.
+
 ## [1.4.0] - 2026-01-19
 - **Vendor & Customer Validation Improvements**:
   - `Vendor`: Now requires `vendorname` and `contact`.
