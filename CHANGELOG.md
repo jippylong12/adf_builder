@@ -1,3 +1,8 @@
+## [1.5.1] - 2026-01-19
+### Changed
+- **BREAKING**: `Prospect` node now strictly enforces the presence of `requestdate`, `vehicle`, `customer`, and `vendor` child nodes to comply with ADF 1.0 DTD.
+- **BREAKING**: `request_date` is now serialized as a child element `<requestdate>` instead of an attribute on `<prospect>`, fixing DTD compliance.
+
 ## [1.5.0] - 2026-01-19
 - **Provider Node Support**:
   - Implemented `Provider` node with support for `name`, `service`, `url`, `email`, `phone`, and `contact`.
