@@ -1,3 +1,6 @@
+## [1.3.1] - 2026-01-19
+- **Validation Refinement**: `Address` now strictly enforces 1 to 5 `street` lines.
+
 ## [1.3.0] - 2026-01-19
 - **Customer & Contact Validations**:
   - `Contact`: Requires Name and at least one Phone or Email.

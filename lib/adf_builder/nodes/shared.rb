@@ -66,10 +66,16 @@ module AdfBuilder
         @attributes[:type] = type if type
       end
 
-      def street(value, line: nil)
-        # Line validation 1-5
-        raise AdfBuilder::Error, "Street line must be 1-5" if line && !line.to_s.match?(/^[1-5]$/)
+      def validate!
+        super
+        streets = @children.select { |c| c.tag_name == :street }
+        raise AdfBuilder::Error, "Address must have at least one street line" if streets.empty?
+        return unless streets.size > 5
 
+        raise AdfBuilder::Error, "Address can have at most 5 street lines"
+      end
+
+      def street(value, line: nil)
         node = GenericNode.new(:street, { line: line }.compact, value)
         add_child(node)
       end

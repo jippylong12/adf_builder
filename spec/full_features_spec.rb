@@ -255,7 +255,10 @@ RSpec.describe "Full Features Verification" do
             contact do
               name "John"
               email "a@b.c"
-              address { country "XX" }
+              address do
+                street "Main"
+                country "XX"
+              end
             end
           end
         end
@@ -269,7 +272,10 @@ RSpec.describe "Full Features Verification" do
           contact do
             name "John"
             email "a@b.c"
-            address { country "US" }
+            address do
+              street "Main"
+              country "US"
+            end
           end
         end
       end
