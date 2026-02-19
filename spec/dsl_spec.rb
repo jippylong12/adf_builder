@@ -5,6 +5,12 @@ require "nokogiri"
 
 RSpec.describe AdfBuilder::DSL do
   describe ".build" do
+    it "requires at least one prospect" do
+      expect do
+        AdfBuilder.build {}
+      end.to raise_error(AdfBuilder::Error, /ADF must contain at least one prospect/)
+    end
+
     it "builds a valid ADF XML document" do
       xml_output = AdfBuilder.build do
         prospect do

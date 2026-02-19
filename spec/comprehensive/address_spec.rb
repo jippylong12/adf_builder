@@ -293,8 +293,8 @@ RSpec.describe AdfBuilder::Nodes::Address do
     end
   end
 
-  describe "multiple addresses in contact" do
-    it "supports home and work addresses" do
+  describe "single address in contact" do
+    it "keeps only the last address provided" do
       xml = AdfBuilder.build do
         prospect do
           request_date Time.now
@@ -329,9 +329,9 @@ RSpec.describe AdfBuilder::Nodes::Address do
 
       doc = Nokogiri::XML(xml)
       addresses = doc.xpath("//contact/address")
-      expect(addresses.size).to eq(2)
-      expect(addresses[0]["type"]).to eq("home")
-      expect(addresses[1]["type"]).to eq("work")
+      expect(addresses.size).to eq(1)
+      expect(addresses[0]["type"]).to eq("work")
+      expect(addresses[0].at_xpath("street").text).to eq("456 Work Street")
     end
   end
 end

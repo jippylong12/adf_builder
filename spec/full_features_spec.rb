@@ -26,6 +26,7 @@ RSpec.describe "Full Features Verification" do
 
           option do
             optionname "Off-road Package"
+            weighting 10
             price 2000, type: :msrp, currency: "USD"
           end
 
@@ -205,19 +206,33 @@ RSpec.describe "Full Features Verification" do
       end
     end.to raise_error(AdfBuilder::Error, /Invalid finance method/)
 
-    # ID Source Requirement
+    # ID Source Optional
     expect do
       AdfBuilder.build do
         prospect do
+          request_date Time.now
           vehicle do
             year 2021
             make "T"
             model "C"
             id "123"
           end
+          customer do
+            contact do
+              name "C"
+              email "c@test.com"
+            end
+          end
+          vendor do
+            vendorname "V"
+            contact do
+              name "V"
+              email "v@test.com"
+            end
+          end
         end
       end
-    end.to raise_error(ArgumentError, /Source is required/)
+    end.not_to raise_error
 
     # Required Vehicle Fields (Year, Make, Model)
     expect do
@@ -271,7 +286,10 @@ RSpec.describe "Full Features Verification" do
             year 2000
             make "M"
             model "M"
-            finance { amount 100, currency: "LOL" }
+            finance do
+              method "cash"
+              amount 100, currency: "LOL"
+            end
           end
         end
       end

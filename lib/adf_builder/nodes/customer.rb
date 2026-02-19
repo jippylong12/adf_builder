@@ -69,8 +69,6 @@ module AdfBuilder
       private
 
       def validate_iso8601(value)
-        # Simple ISO 8601 check (YYYY-MM-DDT...)
-        # Using a basic regex for now or standard library
         require "date"
         Date.iso8601(value.to_s)
       rescue ArgumentError

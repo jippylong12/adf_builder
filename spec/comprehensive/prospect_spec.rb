@@ -102,7 +102,7 @@ RSpec.describe AdfBuilder::Nodes::Prospect do
             end
           end
         end
-      end.to raise_error(AdfBuilder::Error, /Prospect must have a customer/)
+      end.to raise_error(AdfBuilder::Error, /Prospect must have exactly one customer/)
     end
 
     it "requires vendor" do
@@ -123,11 +123,25 @@ RSpec.describe AdfBuilder::Nodes::Prospect do
             end
           end
         end
-      end.to raise_error(AdfBuilder::Error, /Prospect must have a vendor/)
+      end.to raise_error(AdfBuilder::Error, /Prospect must have exactly one vendor/)
     end
   end
 
   describe "optional elements" do
+    it "defaults prospect status to new" do
+      xml = valid_prospect_xml
+      doc = Nokogiri::XML(xml)
+      expect(doc.at_xpath("//adf/prospect")["status"]).to eq("new")
+    end
+
+    it "accepts prospect status resend" do
+      xml = valid_prospect_xml do
+        status :resend
+      end
+      doc = Nokogiri::XML(xml)
+      expect(doc.at_xpath("//adf/prospect")["status"]).to eq("resend")
+    end
+
     it "accepts optional provider" do
       xml = valid_prospect_xml do
         provider do
@@ -340,10 +354,12 @@ RSpec.describe AdfBuilder::Nodes::Prospect do
             end
             option do
               optionname "Off-road Package"
+              weighting 10
             end
             colorcombination do
               interiorcolor "Black"
               exteriorcolor "Green"
+              preference 1
             end
           end
           customer do
@@ -395,6 +411,59 @@ RSpec.describe AdfBuilder::Nodes::Prospect do
       expect(doc.at_xpath("//adf/prospect/customer/id")["source"]).to eq("CRM")
       expect(doc.at_xpath("//adf/prospect/vendor/vendorname").text).to eq("Best Dealership")
       expect(doc.at_xpath("//adf/prospect/provider/service").text).to eq("Classifieds")
+    end
+  end
+
+  describe "DTD cardinality enforcement" do
+    it "keeps only one customer when customer is defined multiple times" do
+      xml = AdfBuilder.build do
+        prospect do
+          request_date Time.now
+          vehicle do
+            year 2024
+            make "T"
+            model "M"
+          end
+          customer do
+            contact do
+              name "First"
+              email "first@test.com"
+            end
+          end
+          customer do
+            contact do
+              name "Second"
+              email "second@test.com"
+            end
+          end
+          vendor do
+            vendorname "V"
+            contact do
+              name "V"
+              email "v@v.com"
+            end
+          end
+        end
+      end
+
+      doc = Nokogiri::XML(xml)
+      expect(doc.xpath("//adf/prospect/customer").size).to eq(1)
+      expect(doc.at_xpath("//adf/prospect/customer/contact/name").text).to eq("Second")
+    end
+
+    it "keeps only one provider when provider is defined multiple times" do
+      xml = valid_prospect_xml do
+        provider do
+          name "First Provider"
+        end
+        provider do
+          name "Second Provider"
+        end
+      end
+
+      doc = Nokogiri::XML(xml)
+      expect(doc.xpath("//adf/prospect/provider").size).to eq(1)
+      expect(doc.at_xpath("//adf/prospect/provider/name").text).to eq("Second Provider")
     end
   end
 end

@@ -129,6 +129,23 @@ module AdfBuilder
         @tag_name = :finance
       end
 
+      def validate!
+        super
+        method_count = @children.count { |c| c.tag_name == :method }
+        amount_count = @children.count { |c| c.tag_name == :amount }
+        balance_count = @children.count { |c| c.tag_name == :balance }
+
+        unless method_count == 1
+          raise AdfBuilder::Error, "Finance must have exactly one method"
+        end
+        unless amount_count >= 1
+          raise AdfBuilder::Error, "Finance must have at least one amount"
+        end
+        return if balance_count <= 1
+
+        raise AdfBuilder::Error, "Finance can have at most one balance"
+      end
+
       def method(value)
         remove_children(:method)
         add_child(FinanceMethod.new(value))
@@ -139,6 +156,7 @@ module AdfBuilder
       end
 
       def balance(value, type: :finance, currency: nil)
+        remove_children(:balance)
         add_child(Balance.new(value, type: type, currency: currency))
       end
     end
@@ -149,23 +167,53 @@ module AdfBuilder
         @tag_name = :option
       end
 
+      def validate!
+        super
+        optionname_count = @children.count { |c| c.tag_name == :optionname }
+        weighting_count = @children.count { |c| c.tag_name == :weighting }
+        manufacturercode_count = @children.count { |c| c.tag_name == :manufacturercode }
+        stock_count = @children.count { |c| c.tag_name == :stock }
+        price_count = @children.count { |c| c.tag_name == :price }
+
+        unless optionname_count == 1
+          raise AdfBuilder::Error, "Option must have exactly one optionname"
+        end
+        unless weighting_count == 1
+          raise AdfBuilder::Error, "Option must have exactly one weighting"
+        end
+        if manufacturercode_count > 1
+          raise AdfBuilder::Error, "Option can have at most one manufacturercode"
+        end
+        if stock_count > 1
+          raise AdfBuilder::Error, "Option can have at most one stock"
+        end
+        return if price_count <= 1
+
+        raise AdfBuilder::Error, "Option can have at most one price"
+      end
+
       def optionname(value)
+        remove_children(:optionname)
         add_child(GenericNode.new(:optionname, {}, value))
       end
 
       def manufacturercode(value)
+        remove_children(:manufacturercode)
         add_child(GenericNode.new(:manufacturercode, {}, value))
       end
 
       def stock(value)
+        remove_children(:stock)
         add_child(GenericNode.new(:stock, {}, value))
       end
 
       def weighting(value)
+        remove_children(:weighting)
         add_child(Weighting.new(value))
       end
 
       def price(value, **attrs)
+        remove_children(:price)
         add_child(Price.new(value, **attrs))
       end
     end
@@ -176,15 +224,38 @@ module AdfBuilder
         @tag_name = :colorcombination
       end
 
+      def validate!
+        super
+        interior_count = @children.count { |c| c.tag_name == :interiorcolor }
+        exterior_count = @children.count { |c| c.tag_name == :exteriorcolor }
+        preference_count = @children.count { |c| c.tag_name == :preference }
+
+        if interior_count.zero? && exterior_count.zero?
+          raise AdfBuilder::Error, "ColorCombination must include interiorcolor or exteriorcolor"
+        end
+        if interior_count > 1
+          raise AdfBuilder::Error, "ColorCombination can have at most one interiorcolor"
+        end
+        if exterior_count > 1
+          raise AdfBuilder::Error, "ColorCombination can have at most one exteriorcolor"
+        end
+        return if preference_count == 1
+
+        raise AdfBuilder::Error, "ColorCombination must have exactly one preference"
+      end
+
       def interiorcolor(value)
+        remove_children(:interiorcolor)
         add_child(GenericNode.new(:interiorcolor, {}, value))
       end
 
       def exteriorcolor(value)
+        remove_children(:exteriorcolor)
         add_child(GenericNode.new(:exteriorcolor, {}, value))
       end
 
       def preference(value)
+        remove_children(:preference)
         add_child(GenericNode.new(:preference, {}, value))
       end
     end

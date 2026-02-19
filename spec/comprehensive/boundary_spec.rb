@@ -544,7 +544,10 @@ RSpec.describe "Boundary & Limit Testing" do
             make "T"
             model "M"
             100.times do |i|
-              option { optionname "Option #{i}" }
+              option do
+                optionname "Option #{i}"
+                weighting i % 100
+              end
             end
           end
           customer do

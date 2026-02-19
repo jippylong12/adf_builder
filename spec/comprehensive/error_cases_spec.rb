@@ -270,8 +270,8 @@ RSpec.describe "Error Cases" do
     end
   end
 
-  describe "argument errors" do
-    it "raises ArgumentError for id without source" do
+  describe "id source handling" do
+    it "allows id without source" do
       expect do
         AdfBuilder.build do
           prospect do
@@ -297,7 +297,7 @@ RSpec.describe "Error Cases" do
             end
           end
         end
-      end.to raise_error(ArgumentError, /Source is required/)
+      end.not_to raise_error
     end
   end
 
@@ -376,10 +376,10 @@ RSpec.describe "Error Cases" do
       end.to raise_error(AdfBuilder::Error)
     end
 
-    it "raises ArgumentError for invalid arguments" do
+    it "does not raise ArgumentError for id without source" do
       expect do
         AdfBuilder::Nodes::Id.new("test", source: nil)
-      end.to raise_error(ArgumentError)
+      end.not_to raise_error
     end
   end
 

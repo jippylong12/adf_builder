@@ -36,6 +36,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
       it "accepts method '#{method}'" do
         xml = build_with_finance do
           method method
+          amount 1
         end
         doc = Nokogiri::XML(xml)
         expect(doc.at_xpath("//finance/method").text).to eq(method)
@@ -62,6 +63,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
       xml = build_with_finance do
         method "cash"
         method "lease"
+        amount 1
       end
       doc = Nokogiri::XML(xml)
       expect(doc.xpath("//finance/method").size).to eq(1)
@@ -73,6 +75,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     %i[downpayment monthly total].each do |type|
       it "accepts type :#{type}" do
         xml = build_with_finance do
+          method "finance"
           amount 5000, type: type
         end
         doc = Nokogiri::XML(xml)
@@ -83,6 +86,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     it "rejects invalid amount type" do
       expect do
         build_with_finance do
+          method "finance"
           amount 5000, type: :weekly
         end
       end.to raise_error(AdfBuilder::Error, /Invalid value for type/)
@@ -91,6 +95,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     %i[maximum minimum exact].each do |limit|
       it "accepts limit :#{limit}" do
         xml = build_with_finance do
+          method "finance"
           amount 5000, limit: limit
         end
         doc = Nokogiri::XML(xml)
@@ -101,6 +106,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     it "rejects invalid limit" do
       expect do
         build_with_finance do
+          method "finance"
           amount 5000, limit: :approximate
         end
       end.to raise_error(AdfBuilder::Error, /Invalid value for limit/)
@@ -109,6 +115,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     it "validates currency against ISO 4217" do
       %w[USD EUR GBP JPY CAD AUD].each do |currency|
         xml = build_with_finance do
+          method "finance"
           amount 5000, currency: currency
         end
         doc = Nokogiri::XML(xml)
@@ -119,6 +126,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     it "rejects invalid currency" do
       expect do
         build_with_finance do
+          method "finance"
           amount 5000, currency: "FAKE"
         end
       end.to raise_error(AdfBuilder::Error, /Invalid value for currency/)
@@ -126,6 +134,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
 
     it "renders amount with all attributes" do
       xml = build_with_finance do
+        method "finance"
         amount 5000, type: :downpayment, limit: :maximum, currency: "USD"
       end
       doc = Nokogiri::XML(xml)
@@ -138,6 +147,7 @@ RSpec.describe AdfBuilder::Nodes::Finance do
 
     it "allows multiple amounts" do
       xml = build_with_finance do
+        method "finance"
         amount 5000, type: :downpayment
         amount 400, type: :monthly
         amount 30_000, type: :total
@@ -151,6 +161,8 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     %i[finance residual].each do |type|
       it "accepts type :#{type}" do
         xml = build_with_finance do
+          method "finance"
+          amount 1
           balance 25_000, type: type
         end
         doc = Nokogiri::XML(xml)
@@ -161,6 +173,8 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     it "rejects invalid balance type" do
       expect do
         build_with_finance do
+          method "finance"
+          amount 1
           balance 25_000, type: :total
         end
       end.to raise_error(AdfBuilder::Error, /Invalid value for type/)
@@ -168,6 +182,8 @@ RSpec.describe AdfBuilder::Nodes::Finance do
 
     it "validates currency against ISO 4217" do
       xml = build_with_finance do
+        method "finance"
+        amount 1
         balance 25_000, currency: "EUR"
       end
       doc = Nokogiri::XML(xml)
@@ -177,6 +193,8 @@ RSpec.describe AdfBuilder::Nodes::Finance do
     it "rejects invalid currency" do
       expect do
         build_with_finance do
+          method "finance"
+          amount 1
           balance 25_000, currency: "LOL"
         end
       end.to raise_error(AdfBuilder::Error, /Invalid value for currency/)
@@ -184,6 +202,8 @@ RSpec.describe AdfBuilder::Nodes::Finance do
 
     it "renders balance with all attributes" do
       xml = build_with_finance do
+        method "finance"
+        amount 1
         balance 25_000, type: :finance, currency: "USD"
       end
       doc = Nokogiri::XML(xml)
@@ -220,9 +240,11 @@ RSpec.describe AdfBuilder::Nodes::Finance do
             model "M"
             finance do
               method "cash"
+              amount 100
             end
             finance do
               method "lease"
+              amount 200
             end
           end
           customer do
@@ -244,6 +266,36 @@ RSpec.describe AdfBuilder::Nodes::Finance do
       doc = Nokogiri::XML(xml)
       expect(doc.xpath("//vehicle/finance").size).to eq(1)
       expect(doc.at_xpath("//vehicle/finance/method").text).to eq("lease")
+    end
+  end
+
+  describe "DTD structure enforcement" do
+    it "requires exactly one method" do
+      expect do
+        build_with_finance do
+          amount 1000
+        end
+      end.to raise_error(AdfBuilder::Error, /Finance must have exactly one method/)
+    end
+
+    it "requires at least one amount" do
+      expect do
+        build_with_finance do
+          method "cash"
+        end
+      end.to raise_error(AdfBuilder::Error, /Finance must have at least one amount/)
+    end
+
+    it "keeps only one balance" do
+      xml = build_with_finance do
+        method "finance"
+        amount 1000
+        balance 500
+        balance 400
+      end
+      doc = Nokogiri::XML(xml)
+      expect(doc.xpath("//finance/balance").size).to eq(1)
+      expect(doc.at_xpath("//finance/balance").text).to eq("400")
     end
   end
 end

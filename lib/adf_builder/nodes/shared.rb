@@ -3,14 +3,12 @@
 module AdfBuilder
   module Nodes
     class Id < Node
-      def initialize(value, source:, sequence: nil)
+      def initialize(value, source: nil, sequence: nil)
         super()
-        raise ArgumentError, "Source is required" if source.nil?
-
         @tag_name = :id
         @value = value
         @attributes[:sequence] = sequence if sequence
-        @attributes[:source] = source
+        @attributes[:source] = source unless source.nil?
       end
     end
 
@@ -104,10 +102,22 @@ module AdfBuilder
 
       def validate!
         super
-        # Custom Validation: At least one Phone OR Email
-        return if @children.any? { |c| %i[phone email].include?(c.tag_name) }
+        phone_count = @children.count { |c| c.tag_name == :phone }
+        email_count = @children.count { |c| c.tag_name == :email }
+        address_count = @children.count { |c| c.tag_name == :address }
 
-        raise AdfBuilder::Error, "Contact must have at least one Phone or Email"
+        if phone_count.zero? && email_count.zero?
+          raise AdfBuilder::Error, "Contact must have at least one Phone or Email"
+        end
+        if phone_count.zero? && email_count != 1
+          raise AdfBuilder::Error, "Contact must have exactly one email when no phone is provided"
+        end
+        if email_count > 1
+          raise AdfBuilder::Error, "Contact can have at most one email"
+        end
+        return unless address_count > 1
+
+        raise AdfBuilder::Error, "Contact can have at most one address"
       end
 
       def name(value, part: nil, type: nil)
@@ -115,6 +125,7 @@ module AdfBuilder
       end
 
       def email(value, preferredcontact: nil)
+        remove_children(:email)
         add_child(Email.new(value, preferredcontact: preferredcontact))
       end
 
@@ -123,6 +134,7 @@ module AdfBuilder
       end
 
       def address(type: nil, &block)
+        remove_children(:address)
         addr = Address.new(type: type)
         addr.instance_eval(&block) if block_given?
         add_child(addr)

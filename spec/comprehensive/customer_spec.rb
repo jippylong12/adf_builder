@@ -52,16 +52,18 @@ RSpec.describe AdfBuilder::Nodes::Customer do
       expect(id_node["source"]).to eq("CRM")
     end
 
-    it "requires source for id" do
-      expect do
-        build_with_customer do
-          id "CID123"
-          contact do
-            name "C"
-            email "c@c.com"
-          end
+    it "allows id without source" do
+      xml = build_with_customer do
+        id "CID123"
+        contact do
+          name "C"
+          email "c@c.com"
         end
-      end.to raise_error(ArgumentError, /Source is required/)
+      end
+      doc = Nokogiri::XML(xml)
+      id_node = doc.at_xpath("//customer/id")
+      expect(id_node.text).to eq("CID123")
+      expect(id_node["source"]).to be_nil
     end
 
     it "allows multiple ids" do
@@ -356,14 +358,15 @@ RSpec.describe AdfBuilder::Nodes::Contact do
       end.to raise_error(AdfBuilder::Error, /Invalid value for preferredcontact/)
     end
 
-    it "allows multiple emails" do
+    it "keeps only the last email" do
       xml = build_with_contact do
         name "J"
         email "personal@test.com"
         email "work@test.com"
       end
       doc = Nokogiri::XML(xml)
-      expect(doc.xpath("//customer/contact/email").size).to eq(2)
+      expect(doc.xpath("//customer/contact/email").size).to eq(1)
+      expect(doc.at_xpath("//customer/contact/email").text).to eq("work@test.com")
     end
   end
 
@@ -505,7 +508,7 @@ RSpec.describe AdfBuilder::Nodes::Contact do
       expect(doc.at_xpath("//contact/address")["type"]).to eq("home")
     end
 
-    it "allows multiple addresses" do
+    it "keeps only the last address" do
       xml = build_with_contact do
         name "J"
         email "j@j.com"
@@ -519,7 +522,8 @@ RSpec.describe AdfBuilder::Nodes::Contact do
         end
       end
       doc = Nokogiri::XML(xml)
-      expect(doc.xpath("//contact/address").size).to eq(2)
+      expect(doc.xpath("//contact/address").size).to eq(1)
+      expect(doc.at_xpath("//contact/address")["type"]).to eq("work")
     end
   end
 end

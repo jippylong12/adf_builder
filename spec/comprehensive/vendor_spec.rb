@@ -89,17 +89,19 @@ RSpec.describe AdfBuilder::Nodes::Vendor do
       expect(id_node["source"]).to eq("DMS")
     end
 
-    it "requires source for id" do
-      expect do
-        build_with_vendor do
-          id "VID123"
-          vendorname "V"
-          contact do
-            name "V"
-            email "v@test.com"
-          end
+    it "allows id without source" do
+      xml = build_with_vendor do
+        id "VID123"
+        vendorname "V"
+        contact do
+          name "V"
+          email "v@test.com"
         end
-      end.to raise_error(ArgumentError, /Source is required/)
+      end
+      doc = Nokogiri::XML(xml)
+      id_node = doc.at_xpath("//vendor/id")
+      expect(id_node.text).to eq("VID123")
+      expect(id_node["source"]).to be_nil
     end
 
     it "allows multiple ids" do

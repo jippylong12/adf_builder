@@ -76,6 +76,13 @@ module AdfBuilder
       def first_prospect
         @children.find { |c| c.is_a?(Prospect) }
       end
+
+      def validate!
+        super
+        return if @children.any? { |c| c.is_a?(Prospect) }
+
+        raise AdfBuilder::Error, "ADF must contain at least one prospect"
+      end
     end
   end
 end

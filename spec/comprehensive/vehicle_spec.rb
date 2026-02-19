@@ -217,15 +217,17 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
   end
 
   describe "id element" do
-    it "requires source attribute" do
-      expect do
-        build_with_vehicle do
-          year 2024
-          make "T"
-          model "M"
-          id "12345"
-        end
-      end.to raise_error(ArgumentError, /Source is required/)
+    it "allows id without source attribute" do
+      xml = build_with_vehicle do
+        year 2024
+        make "T"
+        model "M"
+        id "12345"
+      end
+      doc = Nokogiri::XML(xml)
+      id_node = doc.at_xpath("//vehicle/id")
+      expect(id_node.text).to eq("12345")
+      expect(id_node["source"]).to be_nil
     end
 
     it "accepts id with source" do
@@ -505,6 +507,7 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         model "M"
         option do
           optionname "Sunroof"
+          weighting 0
         end
       end
       doc = Nokogiri::XML(xml)
@@ -517,7 +520,9 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         make "T"
         model "M"
         option do
+          optionname "Sunroof"
           manufacturercode "ABC123"
+          weighting 0
         end
       end
       doc = Nokogiri::XML(xml)
@@ -530,7 +535,9 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         make "T"
         model "M"
         option do
+          optionname "Sunroof"
           stock "STK001"
+          weighting 0
         end
       end
       doc = Nokogiri::XML(xml)
@@ -543,7 +550,10 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
           year 2024
           make "T"
           model "M"
-          option { weighting w }
+          option do
+            optionname "Weighted"
+            weighting w
+          end
         end
         doc = Nokogiri::XML(xml)
         expect(doc.at_xpath("//vehicle/option/weighting").text).to eq(w.to_s)
@@ -556,7 +566,10 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
           year 2024
           make "T"
           model "M"
-          option { weighting(-101) }
+          option do
+            optionname "Invalid"
+            weighting(-101)
+          end
         end
       end.to raise_error(AdfBuilder::Error, /Weighting must be between -100 and 100/)
     end
@@ -567,7 +580,10 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
           year 2024
           make "T"
           model "M"
-          option { weighting 101 }
+          option do
+            optionname "Invalid"
+            weighting 101
+          end
         end
       end.to raise_error(AdfBuilder::Error, /Weighting must be between -100 and 100/)
     end
@@ -579,6 +595,7 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         model "M"
         option do
           optionname "Premium Audio"
+          weighting 10
           price 1500, type: :msrp, currency: "USD"
         end
       end
@@ -592,9 +609,18 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         year 2024
         make "T"
         model "M"
-        option { optionname "Option A" }
-        option { optionname "Option B" }
-        option { optionname "Option C" }
+        option do
+          optionname "Option A"
+          weighting 1
+        end
+        option do
+          optionname "Option B"
+          weighting 2
+        end
+        option do
+          optionname "Option C"
+          weighting 3
+        end
       end
       doc = Nokogiri::XML(xml)
       expect(doc.xpath("//vehicle/option").size).to eq(3)
@@ -609,6 +635,7 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         model "M"
         colorcombination do
           interiorcolor "Black"
+          preference 1
         end
       end
       doc = Nokogiri::XML(xml)
@@ -622,6 +649,7 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         model "M"
         colorcombination do
           exteriorcolor "Red"
+          preference 1
         end
       end
       doc = Nokogiri::XML(xml)
@@ -634,6 +662,7 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         make "T"
         model "M"
         colorcombination do
+          interiorcolor "Black"
           preference 1
         end
       end
@@ -667,10 +696,12 @@ RSpec.describe AdfBuilder::Nodes::Vehicle do
         colorcombination do
           interiorcolor "Black"
           exteriorcolor "White"
+          preference 1
         end
         colorcombination do
           interiorcolor "Beige"
           exteriorcolor "Silver"
+          preference 2
         end
       end
       doc = Nokogiri::XML(xml)
